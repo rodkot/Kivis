@@ -31,6 +31,7 @@ kotlin {
                 implementation("br.com.devsrsouza.compose.icons.jetbrains:feather:1.0.0")
                 implementation("br.com.devsrsouza.compose.icons.jetbrains:simple-icons:1.0.0")
                 implementation ("dev.shreyaspatil:capturable:1.0.3")
+                implementation ("com.raedapps:rasmview:1.2.1")
 
             }
         }

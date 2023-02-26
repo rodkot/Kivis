@@ -1,4 +1,4 @@
-package ru.nsu.ccfit.kivis
+package ru.nsu.ccfit.kivis.component
 
 import java.awt.*
 import java.awt.event.MouseAdapter

@@ -1,4 +1,4 @@
-package ru.nsu.ccfit.kivis
+package ru.nsu.ccfit.kivis.component
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.window.FrameWindowScope
@@ -11,8 +11,6 @@ import ru.nsu.ccfit.kivis.tool.Tool
 import ru.nsu.ccfit.kivis.tool.TrashTool
 
 class Menu() {
-    private val state = MutableStateFlow<String>("")
-    val stateFlow: StateFlow<String> get() = state
     
     @Composable
     fun render(frameWindowScope: FrameWindowScope) {
