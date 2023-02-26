@@ -2,10 +2,7 @@ package ru.nsu.ccfit.kivis
 
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.window.Window
-import androidx.compose.ui.window.WindowPosition
-import androidx.compose.ui.window.WindowState
-import androidx.compose.ui.window.application
+import androidx.compose.ui.window.*
 import ru.nsu.ccfit.kivis.component.Menu
 import java.awt.Dimension
 
@@ -16,7 +13,6 @@ class SizeWindows {
     }
 }
 
-
 fun main() = application {
 
     Window(
@@ -24,8 +20,15 @@ fun main() = application {
             position = WindowPosition.Aligned(Alignment.Center)
         )
     ) {
+
         Menu().render(this)
-        window.minimumSize = Dimension(SizeWindows.height(), SizeWindows.weight())
+//        MenuBar {
+//            Menu("File", mnemonic = 'F') {
+//                RadioButtonItem("Copy", selected = true,onClick = { println("dd") })
+//                //Item("Paste", onClick = { action = "Last action: Paste" }, shortcut = KeyShortcut(Key.V, ctrl = true))
+//            }
+//        }
+
         MainWindow()
     }
 }

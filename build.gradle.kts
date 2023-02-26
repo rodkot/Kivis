@@ -32,7 +32,8 @@ kotlin {
                 implementation("br.com.devsrsouza.compose.icons.jetbrains:simple-icons:1.0.0")
                 implementation ("dev.shreyaspatil:capturable:1.0.3")
                 implementation ("com.raedapps:rasmview:1.2.1")
-
+                implementation ("com.godaddy.android.colorpicker:compose-color-picker-jvm:0.7.0")
+                implementation ("com.github.SmartToolFactory:Compose-Colorful-Sliders:1.1.0")
             }
         }
         val jvmTest by getting
