@@ -13,20 +13,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.Paint
-import androidx.compose.ui.graphics.PaintingStyle
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.Edit3
 import ru.nsu.ccfit.kivis.dialog.PenDialog
 import ru.nsu.ccfit.kivis.tool.PenTool
 import ru.nsu.ccfit.kivis.tool.Tool
 
-class PenButton(private val currentTool: MutableState<Tool>) : Button() {
+class PenButton(private val currentTool: MutableState<Tool>,
+                private val currentPenTool: MutableState<PenTool>) : Button() {
     private val name: String = "Линия"
     private val viewDialog = mutableStateOf(false)
 
@@ -42,8 +38,8 @@ class PenButton(private val currentTool: MutableState<Tool>) : Button() {
         // currentTool.value = PenTool()
     }
 
-    private fun changeTool(penTool: PenTool){
-        currentTool.value = penTool
+    private fun changeTool(){
+        currentTool.value = currentPenTool.value
     }
 
     @OptIn(ExperimentalFoundationApi::class)
@@ -73,7 +69,7 @@ class PenButton(private val currentTool: MutableState<Tool>) : Button() {
                 Icon(FeatherIcons.Edit3, contentDescription = "Localized description")
             }
             if (dialog.value) {
-                PenDialog({ changeTool(it) }, { dialog.value=false })
+                PenDialog(currentPenTool,{ changeTool() }, { dialog.value=false })
             }
         }
     }

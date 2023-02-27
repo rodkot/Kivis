@@ -19,15 +19,16 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import compose.icons.FeatherIcons
-import compose.icons.feathericons.Droplet
 import compose.icons.feathericons.MinusSquare
-import ru.nsu.ccfit.kivis.dialog.PenDialog
+import ru.nsu.ccfit.kivis.component.ToolBar.Companion.currentPolygonTool
 import ru.nsu.ccfit.kivis.dialog.PolygonDialog
-import ru.nsu.ccfit.kivis.tool.PenTool
 import ru.nsu.ccfit.kivis.tool.PolygonTool
 import ru.nsu.ccfit.kivis.tool.Tool
 
-class PolygonButton(private val currentTool: MutableState<Tool>) : Button() {
+class PolygonButton(
+    private val currentTool: MutableState<Tool>,
+    private val currentPolygonTool: MutableState<PolygonTool>
+) : Button() {
     private val name: String = "Многоугольник"
     private val viewDialog = mutableStateOf(false)
 
@@ -35,8 +36,8 @@ class PolygonButton(private val currentTool: MutableState<Tool>) : Button() {
         viewDialog.value = true
     }
 
-    private fun changeTool(polygonTool: PolygonTool) {
-        currentTool.value = polygonTool
+    private fun changeTool() {
+        currentTool.value = currentPolygonTool.value
     }
 
     @OptIn(ExperimentalFoundationApi::class)
@@ -66,9 +67,8 @@ class PolygonButton(private val currentTool: MutableState<Tool>) : Button() {
                 Icon(FeatherIcons.MinusSquare, contentDescription = "Localized description")
             }
             if (dialog.value) {
-                PolygonDialog({ changeTool(it) }, { dialog.value = false })
+                PolygonDialog(currentPolygonTool, { changeTool() }, { dialog.value = false })
             }
         }
-
     }
 }

@@ -19,10 +19,8 @@ import ru.nsu.ccfit.kivis.tool.PenTool
 @OptIn(ExperimentalMaterialApi::class)
 @Preview
 @Composable
-fun FillDialog(confirmClick: (FillTool) -> Unit, cancelClick: () -> Unit) {
-    val currentColor = mutableStateOf(HsvColor.from(Color.Red))
-
-    val branch = mutableStateOf(0F)
+fun FillDialog(default: MutableState<FillTool>,confirmClick: () -> Unit, cancelClick: () -> Unit) {
+    val currentColor = mutableStateOf(HsvColor.from(default.value.color))
 
     AlertDialog(
         onDismissRequest = {
@@ -42,7 +40,8 @@ fun FillDialog(confirmClick: (FillTool) -> Unit, cancelClick: () -> Unit) {
                 Button(
                     modifier = Modifier.weight(1f).padding(8.dp),
                     onClick = {
-                        confirmClick.invoke(FillTool(currentColor.value.toColor()))
+                        default.value = FillTool(currentColor.value.toColor())
+                        confirmClick.invoke()
                         cancelClick.invoke()
                     }
                 ) {

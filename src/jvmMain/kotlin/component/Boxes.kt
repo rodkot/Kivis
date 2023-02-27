@@ -24,7 +24,8 @@ fun widthBox(widthBrunch: MutableState<Float>, range: ClosedFloatingPointRange<F
                 valueRange = range,
                 steps = steps,
                 onValueChange = {
-                    widthBrunch.value = it}
+                    widthBrunch.value = it
+                }
             )
         }
     }
@@ -41,7 +42,8 @@ fun rotationBox(rotation: MutableState<Float>, range: ClosedFloatingPointRange<F
                 valueRange = range,
                 steps = steps,
                 onValueChange = {
-                    rotation.value = it}
+                    rotation.value = it
+                }
             )
         }
     }
@@ -58,7 +60,8 @@ fun radiusBox(radius: MutableState<Float>, range: ClosedFloatingPointRange<Float
                 valueRange = range,
                 steps = steps,
                 onValueChange = {
-                    radius.value = it}
+                    radius.value = it
+                }
             )
         }
     }
@@ -75,14 +78,15 @@ fun countVerticesBox(countVertices: MutableState<Float>, range: ClosedFloatingPo
                 valueRange = range,
                 steps = steps,
                 onValueChange = {
-                    countVertices.value = it}
+                    countVertices.value = it
+                }
             )
         }
     }
 }
 
 @Composable
-fun colorBox(currentColor: MutableState<HsvColor>){
+fun colorBox(currentColor: MutableState<HsvColor>) {
     Box() {
         Column {
             Text(text = "Цвет:", color = Color.Black)
@@ -95,7 +99,7 @@ fun colorBox(currentColor: MutableState<HsvColor>){
             )
             Spacer(Modifier.fillMaxWidth().padding(10.dp))
             ClassicColorPicker(
-                color = HsvColor.from(Color.Red),
+                color = currentColor.value,
                 modifier = Modifier.fillMaxWidth().height(200.dp),
                 showAlphaBar = false,
                 onColorChanged = { hsvColor: HsvColor ->

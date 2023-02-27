@@ -21,12 +21,10 @@ import androidx.compose.ui.unit.dp
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.Droplet
 import ru.nsu.ccfit.kivis.dialog.FillDialog
-import ru.nsu.ccfit.kivis.dialog.PenDialog
 import ru.nsu.ccfit.kivis.tool.FillTool
-import ru.nsu.ccfit.kivis.tool.PenTool
 import ru.nsu.ccfit.kivis.tool.Tool
 
-class FillButton(private val currentTool: MutableState<Tool>) : Button() {
+class FillButton(private val currentTool: MutableState<Tool>, private val currentFillTool: MutableState<FillTool>) : Button() {
     private val name: String = "Заливка"
     private val viewDialog = mutableStateOf(false)
 
@@ -34,8 +32,8 @@ class FillButton(private val currentTool: MutableState<Tool>) : Button() {
         viewDialog.value = true
     }
 
-    private fun changeTool(fillTool: FillTool) {
-        currentTool.value = fillTool
+    private fun changeTool() {
+        currentTool.value = currentFillTool.value
     }
 
     @OptIn(ExperimentalFoundationApi::class)
@@ -65,7 +63,7 @@ class FillButton(private val currentTool: MutableState<Tool>) : Button() {
                 Icon(FeatherIcons.Droplet, contentDescription = "Localized description")
             }
             if (dialog.value) {
-                FillDialog({ changeTool(it) }, { dialog.value = false })
+                FillDialog(currentFillTool,{ changeTool() }, { dialog.value = false })
             }
         }
 

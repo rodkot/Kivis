@@ -7,15 +7,16 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import ru.nsu.ccfit.kivis.component.*
+import ru.nsu.ccfit.kivis.tool.PenTool
 import ru.nsu.ccfit.kivis.tool.PolygonTool
 
 @OptIn(ExperimentalMaterialApi::class)
 @Preview
 @Composable
-fun PolygonDialog(confirmClick: (PolygonTool) -> Unit, cancelClick: () -> Unit) {
-    val countVertices = mutableStateOf(2f)
-    val radius = mutableStateOf(0f)
-    val rotation = mutableStateOf(0f)
+fun PolygonDialog(default: MutableState<PolygonTool>, confirmClick: () -> Unit, cancelClick: () -> Unit) {
+    val countVertices = mutableStateOf(default.value.countVertices.toFloat())
+    val radius = mutableStateOf(default.value.radius)
+    val rotation = mutableStateOf(default.value.rotation)
 
     AlertDialog(
         onDismissRequest = {
@@ -37,13 +38,14 @@ fun PolygonDialog(confirmClick: (PolygonTool) -> Unit, cancelClick: () -> Unit) 
                 Button(
                     modifier = Modifier.weight(1f).padding(8.dp),
                     onClick = {
-                        confirmClick.invoke(
+                        default.value =
                             PolygonTool(
                                 rotation = rotation.value,
                                 radius = radius.value,
                                 countVertices = countVertices.value.toInt()
                             )
-                        )
+
+                        confirmClick.invoke()
                         cancelClick.invoke()
                     }
                 ) {

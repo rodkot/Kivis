@@ -1,10 +1,8 @@
 package ru.nsu.ccfit.kivis
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -35,17 +33,25 @@ fun MainWindow() {
         Box(Modifier.fillMaxSize().background(Color.Gray).padding(10.dp)) {
             PaintCanvas().render()
         }
-        when(dialogTool.value){
+        when (dialogTool.value) {
             PenTool.name -> {
-                PenDialog({ToolBar.currentTool.value = it},{dialogTool.value = "TOOL"})
+                PenDialog(ToolBar.currentPenTool,
+                    { ToolBar.currentTool.value = ToolBar.currentPenTool.value }) { dialogTool.value = "TOOL" }
             }
-            PolygonTool.name ->{
-                PolygonDialog({ToolBar.currentTool.value = it},{dialogTool.value = "TODO"})
+
+            PolygonTool.name -> {
+                PolygonDialog(ToolBar.currentPolygonTool,
+                    { ToolBar.currentTool.value = ToolBar.currentPolygonTool.value },
+                    { dialogTool.value = "TODO" })
             }
-            FillTool.name ->{
-                FillDialog({ToolBar.currentTool.value = it},{dialogTool.value = "TODO"})
+
+            FillTool.name -> {
+                FillDialog(ToolBar.currentFillTool,
+                    { ToolBar.currentTool.value = ToolBar.currentFillTool.value },
+                    { dialogTool.value = "TODO" })
             }
-            TrashTool.name->{
+
+            TrashTool.name -> {
                 ToolBar.currentTool.value = TrashTool()
             }
         }
