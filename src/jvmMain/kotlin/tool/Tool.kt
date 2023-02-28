@@ -1,5 +1,7 @@
 package ru.nsu.ccfit.kivis.tool
 
-open class Tool {
+import ru.nsu.ccfit.kivis.component.PaintCanvas
 
+abstract class Tool {
+  abstract fun draw(paintCanvas: PaintCanvas)
 }

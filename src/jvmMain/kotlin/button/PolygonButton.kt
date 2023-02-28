@@ -20,7 +20,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.MinusSquare
-import ru.nsu.ccfit.kivis.component.ToolBar.Companion.currentPolygonTool
 import ru.nsu.ccfit.kivis.dialog.PolygonDialog
 import ru.nsu.ccfit.kivis.tool.PolygonTool
 import ru.nsu.ccfit.kivis.tool.Tool
