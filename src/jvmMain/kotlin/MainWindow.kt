@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.unit.dp
@@ -24,19 +25,20 @@ class MainWindowController {
         val currentPolygonTool = mutableStateOf(PolygonTool())
         val currentFillTool = mutableStateOf(FillTool())
 
-        val image = mutableStateOf(ImageBitmap(10, 10))
-        val counter = mutableStateOf(0L)
+        private val image = mutableStateOf(ImageBitmap(10, 10))
         var isPaint = mutableStateOf(false)
 
         val toolBar = ToolBar(currentTool, currentPenTool, currentFillTool, currentPolygonTool)
-        val canvas = PaintCanvas(image, isPaint, counter)
+        val canvas = PaintCanvas(image, isPaint)
     }
 }
-
+var previousClick: Pair<Offset, Offset> = Offset(0f, 0f) to Offset(0f, 0f)
 
 @Composable
 @Preview
 fun MainWindow() {
+
+    val s = MainWindowController.currentTool.value
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -44,12 +46,16 @@ fun MainWindow() {
         val dialogManual = remember { Menu.Controller.instruction }
         val dialogTool = remember { Menu.Controller.tool }
 
-        val  imageCounter = remember { MainWindowController.counter }
+        val click = remember { MainWindowController.canvas.offsetClick }
         Box(Modifier.fillMaxWidth()) {
             MainWindowController.toolBar.render()
         }
         Box(Modifier.fillMaxSize().background(Color.Gray).padding(10.dp)) {
-            println(imageCounter.value)
+
+            if (click.value != previousClick)
+                s.draw(MainWindowController.canvas)
+            previousClick = click.value
+
             MainWindowController.canvas.render()
         }
         when (dialogTool.value) {

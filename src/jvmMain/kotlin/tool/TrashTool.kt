@@ -1,6 +1,7 @@
 package ru.nsu.ccfit.kivis.tool
 
 import ru.nsu.ccfit.kivis.component.PaintCanvas
+import ru.nsu.ccfit.kivis.component.clear
 
 class TrashTool : Tool() {
     companion object{
@@ -8,6 +9,6 @@ class TrashTool : Tool() {
     }
 
     override fun draw(paintCanvas: PaintCanvas) {
-        TODO("Not yet implemented")
+        paintCanvas.clear()
     }
 }

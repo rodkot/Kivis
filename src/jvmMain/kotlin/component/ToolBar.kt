@@ -42,7 +42,6 @@ class ToolBar(
         }, modifier = Modifier.fillMaxWidth(),
             actions = {
                 Row {
-
                     // Box(modifier = if (currentTool.value is PenTool) Modifier.background(Color.Blue) else Modifier){
                     PenButton(currentTool, currentPenTool).render()
                     //}

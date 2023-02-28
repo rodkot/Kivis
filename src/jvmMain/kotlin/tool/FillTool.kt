@@ -2,6 +2,7 @@ package ru.nsu.ccfit.kivis.tool
 
 import androidx.compose.ui.graphics.Color
 import ru.nsu.ccfit.kivis.component.PaintCanvas
+import ru.nsu.ccfit.kivis.component.fill
 
 class FillTool(val color: Color = Color.Red) : Tool() {
     companion object {
@@ -9,6 +10,6 @@ class FillTool(val color: Color = Color.Red) : Tool() {
     }
 
     override fun draw(paintCanvas: PaintCanvas) {
-        TODO("Not yet implemented")
+        paintCanvas.fill(paintCanvas.offsetPress,color)
     }
 }
