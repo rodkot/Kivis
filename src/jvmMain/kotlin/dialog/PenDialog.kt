@@ -26,7 +26,7 @@ fun PenDialog(default: MutableState<PenTool>,confirmClick: () -> Unit, cancelCli
         title = { Text(text = "Настройка инстумента ${PenTool.name}") },
         text = {
             Column {
-                widthBox(branch, 0f..10f, 10)
+                widthBox(branch, 1f..11f, 10)
                 colorBox(currentColor)
             }
         },
