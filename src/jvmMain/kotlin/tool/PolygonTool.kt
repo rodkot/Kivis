@@ -3,9 +3,11 @@ package ru.nsu.ccfit.kivis.tool
 import androidx.compose.ui.geometry.Offset
 import ru.nsu.ccfit.kivis.component.PaintCanvas
 import ru.nsu.ccfit.kivis.component.drawPolygon
+import kotlin.math.cos
+import kotlin.math.sin
 
 class PolygonTool(
-    val countVertices: Int = 4,
+    val countVertices: Int = 3,
     val radius: Float = 10f,
     val rotation: Float = 0f
 ) : Tool() {
@@ -14,13 +16,21 @@ class PolygonTool(
     }
 
     override fun draw(paintCanvas: PaintCanvas) {
-        paintCanvas.drawPolygon(getOffsetsPolygon())
+        paintCanvas.drawPolygon(getOffsetsPolygon(paintCanvas.offsetPress))
     }
 
-    private fun getOffsetsPolygon(): List<Offset> {
-        val fi  = 360/countVertices
-        val full  = fi + rotation
+    private fun getOffsetsPolygon(centerOffset: Offset): List<Offset> {
+        val listOffset: ArrayList<Offset> = arrayListOf()
+        val fi = 360 / countVertices
+        var current = rotation
 
-        TODO("Реализовать")
+        for (i in 0 until countVertices) {
+            val radians = (Math.PI / 180) * (current % 360)
+            val x = radius * cos(radians)
+            val y = radius * sin(radians)
+            listOffset.add(Offset(centerOffset.x + x.toFloat(), centerOffset.y + y.toFloat()))
+            current += fi
+        }
+        return listOffset
     }
 }

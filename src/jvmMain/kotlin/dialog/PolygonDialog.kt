@@ -7,7 +7,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import ru.nsu.ccfit.kivis.component.*
-import ru.nsu.ccfit.kivis.tool.PenTool
 import ru.nsu.ccfit.kivis.tool.PolygonTool
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -25,7 +24,7 @@ fun PolygonDialog(default: MutableState<PolygonTool>, confirmClick: () -> Unit, 
         title = { Text(text = "Настройка инстумента ${PolygonTool.name}") },
         text = {
             Column {
-                countVerticesBox(countVertices, 3f..5f, 2)
+                countVerticesBox(countVertices, 3f..13f,10 )
                 rotationBox(rotation, 0f..360f, 360)
                 radiusBox(radius, 1f..100f, 100)
             }
