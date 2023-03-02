@@ -25,7 +25,7 @@ class MainWindowController {
         val currentPolygonTool = mutableStateOf(PolygonTool())
         val currentFillTool = mutableStateOf(FillTool())
 
-        private val image = mutableStateOf(ImageBitmap(10, 10))
+        private val image = mutableStateOf(ImageBitmap(10, 10, hasAlpha = false))
         var isPaint = mutableStateOf(false)
 
         val toolBar = ToolBar(currentTool, currentPenTool, currentFillTool, currentPolygonTool)

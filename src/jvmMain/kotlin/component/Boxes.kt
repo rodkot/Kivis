@@ -101,7 +101,7 @@ fun colorBox(currentColor: MutableState<HsvColor>) {
             ClassicColorPicker(
                 color = currentColor.value,
                 modifier = Modifier.fillMaxWidth().height(200.dp),
-                showAlphaBar = false,
+                showAlphaBar = true,
                 onColorChanged = { hsvColor: HsvColor ->
                     currentColor.value = hsvColor
                 })

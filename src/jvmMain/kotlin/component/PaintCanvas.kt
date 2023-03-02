@@ -11,8 +11,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.*
+import androidx.compose.ui.graphics.colorspace.ColorSpaces
 import androidx.compose.ui.input.pointer.*
 import ru.nsu.ccfit.kivis.tool.PenTool
+import java.awt.color.ColorSpace
 
 
 class PaintCanvas(
@@ -27,8 +29,8 @@ class PaintCanvas(
         val preBitmap = ImageBitmap(
             width = weight,
             height = height,
-            config = ImageBitmapConfig.Rgb565,
-            hasAlpha = false
+            config = ImageBitmapConfig.Argb8888,
+            colorSpace = ColorSpaces.Srgb
         )
         val canvas = Canvas(image = preBitmap)
         val paint = Paint()
