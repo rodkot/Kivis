@@ -1,11 +1,12 @@
 package ru.nsu.ccfit.kivis
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.background
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -57,13 +58,70 @@ fun MainWindow() {
         Box(Modifier.fillMaxWidth()) {
             MainWindowController.toolBar.render()
         }
-        Box(Modifier.fillMaxSize().background(Color.Gray).padding(10.dp)) {
+//        Box(Modifier.fillMaxSize().padding(10.dp)) {
+//            val stateVertical = rememberScrollState(0)
+//            val stateHorizontal = rememberScrollState(0)
+//            Box(
+//                Modifier.fillMaxSize().padding(10.dp)
+//                    .verticalScroll(stateVertical)
+//                    .padding(end = 12.dp, bottom = 12.dp)
+//                    .horizontalScroll(stateHorizontal)
+//            ) {
+//
+//                    if (click.value != previousClick)
+//                        s.draw(MainWindowController.canvas)
+//                    previousClick = click.value
+//
+//                    MainWindowController.canvas.render()
+//
+//
+//
+//            }
+//            VerticalScrollbar(
+//                modifier = Modifier.align(Alignment.CenterEnd)
+//                    .fillMaxHeight()
+//                    .padding(end = 12.dp),
+//                adapter = rememberScrollbarAdapter(stateVertical)
+//            )
+//            HorizontalScrollbar(
+//                modifier = Modifier.align(Alignment.BottomStart)
+//                    .fillMaxWidth()
+//                    .padding(end = 12.dp),
+//                adapter = rememberScrollbarAdapter(stateHorizontal)
+//            )
+//        }
 
-            if (click.value != previousClick)
-                s.draw(MainWindowController.canvas)
-            previousClick = click.value
+        Box(Modifier.fillMaxSize().background(Color.Gray)) {
+            val stateVertical = rememberScrollState(0)
+            val stateHorizontal = rememberScrollState(0)
 
-            MainWindowController.canvas.render()
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(stateVertical)
+                    // .padding(end = 12.dp, bottom = 12.dp)
+                    .horizontalScroll(stateHorizontal)
+            ) {
+                if (click.value != previousClick)
+                    s.draw(MainWindowController.canvas)
+                previousClick = click.value
+
+                MainWindowController.canvas.render()
+            }
+
+
+            VerticalScrollbar(
+                modifier = Modifier.align(Alignment.CenterEnd)
+                    .fillMaxHeight(),
+                adapter = rememberScrollbarAdapter(stateVertical)
+            )
+            HorizontalScrollbar(
+                modifier = Modifier.align(Alignment.BottomStart)
+                    .fillMaxWidth()
+                    .padding(end = 12.dp),
+                adapter = rememberScrollbarAdapter(stateHorizontal)
+            )
+
         }
         when (dialogTool.value) {
             PenTool.name -> {

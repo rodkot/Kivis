@@ -5,6 +5,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
 import ru.nsu.ccfit.kivis.component.Menu
+import java.awt.Dimension
 
 class SizeWindows {
     companion object {
@@ -19,14 +20,14 @@ fun main() = application {
         onCloseRequest = ::exitApplication,
         title = "Kivis",
         icon = painterResource("kivi_logo.png"),
-        resizable = false,
+      //  resizable = false,
         state = WindowState(
             position = WindowPosition.Aligned(Alignment.Center),
             width = SizeWindows.width().dp,
             height = SizeWindows.height().dp
         )
     ) {
-       // window.minimumSize = Dimension(SizeWindows.width(), SizeWindows.height())
+        window.minimumSize = Dimension(SizeWindows.width(), SizeWindows.height())
         Menu().render(this)
         MainWindow()
     }
