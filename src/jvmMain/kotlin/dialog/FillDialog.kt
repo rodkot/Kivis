@@ -1,20 +1,14 @@
 package ru.nsu.ccfit.kivis.dialog
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
-import com.godaddy.android.colorpicker.ClassicColorPicker
 import com.godaddy.android.colorpicker.HsvColor
-import ru.nsu.ccfit.kivis.component.colorBox
-import ru.nsu.ccfit.kivis.component.widthBox
+import ru.nsu.ccfit.kivis.component.colorSelectionBox
 import ru.nsu.ccfit.kivis.tool.FillTool
-import ru.nsu.ccfit.kivis.tool.PenTool
 
 @OptIn(ExperimentalMaterialApi::class)
 @Preview
@@ -29,7 +23,7 @@ fun FillDialog(default: MutableState<FillTool>,confirmClick: () -> Unit, cancelC
         title = { Text(text = "Настройка инстумента ${FillTool.name}") },
         text = {
             Column {
-                colorBox(currentColor)
+                colorSelectionBox(currentColor)
             }
         },
         buttons = {

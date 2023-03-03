@@ -2,7 +2,7 @@ package ru.nsu.ccfit.kivis.tool
 
 import androidx.compose.ui.geometry.Offset
 import ru.nsu.ccfit.kivis.component.PaintCanvas
-import ru.nsu.ccfit.kivis.component.drawPolygon
+import ru.nsu.ccfit.kivis.draw.drawPolygon
 import kotlin.math.cos
 import kotlin.math.sin
 

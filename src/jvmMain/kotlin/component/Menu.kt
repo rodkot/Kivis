@@ -2,22 +2,28 @@ package ru.nsu.ccfit.kivis.component
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyShortcut
 import androidx.compose.ui.window.FrameWindowScope
 import androidx.compose.ui.window.MenuBar
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import ru.nsu.ccfit.kivis.tool.*
 
 class Menu() {
 
+    @OptIn(ExperimentalComposeUiApi::class)
     @Composable
     fun render(frameWindowScope: FrameWindowScope) {
         frameWindowScope.MenuBar {
             Menu("Файл", mnemonic = 'F') {
-                Item("Сохранить", onClick = { Controller.save.value = true })
+                Item(
+                    "Сохранить",
+                    onClick = { Controller.save.value = true },
+                    shortcut = KeyShortcut(Key.S, ctrl = true)
+                )
             }
             Menu("Инструменты", mnemonic = 'I') {
-                Item(PenTool.name, onClick = { Controller.tool.value = PenTool.name })
+                RadioButtonItem(PenTool.name, selected = true, onClick = { Controller.tool.value = PenTool.name })
                 Separator()
                 Item(PolygonTool.name, onClick = { Controller.tool.value = PolygonTool.name })
                 Separator()

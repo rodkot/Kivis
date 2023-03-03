@@ -11,10 +11,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.godaddy.android.colorpicker.HsvColor
-import ru.nsu.ccfit.kivis.component.colorBox
-import ru.nsu.ccfit.kivis.tool.FillTool
 
 @OptIn(ExperimentalMaterialApi::class)
 @Preview
@@ -26,17 +24,18 @@ fun AboutDialog(cancelClick: () -> Unit) {
             // cancelClick.invoke()
         },
         title = { Text(text = "О программе Kivis") },
+        modifier = Modifier.width(300.dp),
         text = {
             Column {
                 Text(text = "Разработчик:")
-                Text(text = "Котов Родион")
-                Text(text = "студент 3 курса ФИТ НГУ")
+                Text(text = "Котов Родион", textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
+                Text(text = "студент 3 курса ФИТ НГУ", textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
                 Spacer(Modifier.width(20.dp))
-                Text(text = "Программа созадана в рамках курса \"Компьютерная и инженерная графика\" ")
+                Text(text = "Программа созадана в рамках курса \"Компьютерная и инженерная графика\" ", textAlign = TextAlign.Center)
                 Spacer(Modifier.width(20.dp))
-                Text(text = "г. Новосибириск")
+                Text(text = "г. Новосибириск", textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
                 Spacer(Modifier.width(20.dp))
-                Text(text = "2020 год")
+                Text(text = "2023 год", textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
             }
         },
         buttons = {

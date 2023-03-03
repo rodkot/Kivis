@@ -4,6 +4,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.TooltipArea
 import androidx.compose.foundation.TooltipPlacement
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.mouseClickable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -29,7 +30,7 @@ class FillButton(private val currentTool: MutableState<Tool>, private val curren
     private val viewDialog = mutableStateOf(false)
 
     override fun handleClick() {
-        viewDialog.value = true
+       changeTool()
     }
 
     private fun changeTool() {
@@ -53,7 +54,7 @@ class FillButton(private val currentTool: MutableState<Tool>, private val curren
                     )
                 }
             },
-            modifier = Modifier.padding(start = 40.dp),
+            modifier = Modifier.padding(start = 40.dp).mouseClickable {  viewDialog.value = true  },
             delayMillis = 600,
             tooltipPlacement = TooltipPlacement.CursorPoint(
                 alignment = Alignment.BottomEnd

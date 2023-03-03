@@ -1,13 +1,8 @@
 package ru.nsu.ccfit.kivis.tool
 
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Rect
-import androidx.compose.ui.graphics.Canvas
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Paint
-import androidx.compose.ui.graphics.PaintingStyle
 import ru.nsu.ccfit.kivis.component.PaintCanvas
-import ru.nsu.ccfit.kivis.component.drawLine
+import ru.nsu.ccfit.kivis.draw.drawLine
 
 class PenTool(
     val brash: Int = 1,

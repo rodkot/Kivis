@@ -5,10 +5,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.godaddy.android.colorpicker.HsvColor
-import ru.nsu.ccfit.kivis.component.colorBox
+import ru.nsu.ccfit.kivis.component.colorSelectionBox
 import ru.nsu.ccfit.kivis.component.widthBox
 import ru.nsu.ccfit.kivis.tool.PenTool
 
@@ -27,7 +26,8 @@ fun PenDialog(default: MutableState<PenTool>,confirmClick: () -> Unit, cancelCli
         text = {
             Column {
                 widthBox(branch, 1f..11f, 10)
-                colorBox(currentColor)
+                Spacer(Modifier.fillMaxWidth().padding(5.dp))
+                colorSelectionBox(currentColor)
             }
         },
         buttons = {

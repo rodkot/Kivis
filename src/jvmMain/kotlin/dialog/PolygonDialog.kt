@@ -25,8 +25,10 @@ fun PolygonDialog(default: MutableState<PolygonTool>, confirmClick: () -> Unit, 
         text = {
             Column {
                 countVerticesBox(countVertices, 3f..13f,10 )
+                Spacer(Modifier.height(10.dp))
                 rotationBox(rotation, 0f..360f, 360)
-                radiusBox(radius, 1f..100f, 100)
+                Spacer(Modifier.height(10.dp))
+                radiusBox(radius, 10f..100f, 110)
             }
         },
         buttons = {

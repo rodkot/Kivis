@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -13,8 +12,6 @@ import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.colorspace.ColorSpaces
 import androidx.compose.ui.input.pointer.*
-import ru.nsu.ccfit.kivis.tool.PenTool
-import java.awt.color.ColorSpace
 
 
 class PaintCanvas(
@@ -49,6 +46,7 @@ class PaintCanvas(
             .onPointerEvent(PointerEventType.Release) {
                 positionRelease = it.changes.first().position
                 offsetRelease = positionRelease
+                if (positionRelease.x >size.width)
                 offsetClick.value = offsetRelease to offsetPress
                 //PenTool().draw(this@PaintCanvas)
             }.onPointerEvent(PointerEventType.Press) {

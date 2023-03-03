@@ -4,6 +4,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.TooltipArea
 import androidx.compose.foundation.TooltipPlacement
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.mouseClickable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -16,7 +17,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.MinusSquare
@@ -32,7 +32,7 @@ class PolygonButton(
     private val viewDialog = mutableStateOf(false)
 
     override fun handleClick() {
-        viewDialog.value = true
+        changeTool()
     }
 
     private fun changeTool() {
@@ -47,7 +47,6 @@ class PolygonButton(
             tooltip = {
                 Surface(
                     modifier = Modifier.shadow(4.dp),
-                    color = Color(0, 0, 0, 255),
                     shape = RoundedCornerShape(4.dp)
                 ) {
                     Text(
@@ -56,7 +55,7 @@ class PolygonButton(
                     )
                 }
             },
-            modifier = Modifier.padding(start = 40.dp),
+            modifier = Modifier.padding(start = 40.dp).mouseClickable {  viewDialog.value = true  },
             delayMillis = 600,
             tooltipPlacement = TooltipPlacement.CursorPoint(
                 alignment = Alignment.BottomEnd

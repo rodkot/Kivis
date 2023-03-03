@@ -1,7 +1,9 @@
 package ru.nsu.ccfit.kivis.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Slider
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -18,6 +20,7 @@ fun widthBox(widthBrunch: MutableState<Float>, range: ClosedFloatingPointRange<F
     Box(contentAlignment = Alignment.Center) {
         Column {
             Text(text = "Толщина: ${widthBrunch.value.toInt()}", color = Color.Black)
+            Spacer(Modifier.height(10.dp))
             Slider(
                 value = widthBrunch.value,
                 modifier = Modifier.width(200.dp).height(10.dp),
@@ -36,6 +39,7 @@ fun rotationBox(rotation: MutableState<Float>, range: ClosedFloatingPointRange<F
     Box(contentAlignment = Alignment.Center) {
         Column {
             Text(text = "Поворот: ${rotation.value.toInt()} градусов", color = Color.Black)
+            Spacer(Modifier.height(10.dp))
             Slider(
                 value = rotation.value,
                 modifier = Modifier.width(200.dp).height(10.dp),
@@ -54,6 +58,7 @@ fun radiusBox(radius: MutableState<Float>, range: ClosedFloatingPointRange<Float
     Box(contentAlignment = Alignment.Center) {
         Column {
             Text(text = "Радиус: ${radius.value.toInt()}", color = Color.Black)
+            Spacer(Modifier.height(10.dp))
             Slider(
                 value = radius.value,
                 modifier = Modifier.width(200.dp).height(10.dp),
@@ -72,6 +77,7 @@ fun countVerticesBox(countVertices: MutableState<Float>, range: ClosedFloatingPo
     Box(contentAlignment = Alignment.Center) {
         Column {
             Text(text = "Количество вершин: ${countVertices.value.toInt()} ", color = Color.Black)
+            Spacer(Modifier.height(10.dp))
             Slider(
                 value = countVertices.value,
                 modifier = Modifier.width(200.dp).height(10.dp),
@@ -86,26 +92,74 @@ fun countVerticesBox(countVertices: MutableState<Float>, range: ClosedFloatingPo
 }
 
 @Composable
-fun colorBox(currentColor: MutableState<HsvColor>) {
+fun circleColorSelectionButton(color: Color, onClick: (Color) -> Unit) {
+    Spacer(
+        modifier = Modifier.background(
+            color,
+            shape = CircleShape
+        )
+            .height(20.dp)
+            .width(20.dp)
+            .clickable { onClick.invoke(color) }
+    )
+}
+
+@Composable
+fun colorStandardSelectionBox(currentColor: MutableState<HsvColor>) {
+    Row {
+
+        circleColorSelectionButton(Color.Red) {
+            currentColor.value = HsvColor.from(it)
+        }
+        Spacer(Modifier.fillMaxWidth().weight(1f))
+        circleColorSelectionButton(Color.Yellow) {
+            currentColor.value = HsvColor.from(it)
+        }
+        Spacer(Modifier.fillMaxWidth().weight(1f))
+        circleColorSelectionButton(Color.Green) {
+            currentColor.value = HsvColor.from(it)
+        }
+        Spacer(Modifier.fillMaxWidth().weight(1f))
+        circleColorSelectionButton(Color.Cyan) {
+            currentColor.value = HsvColor.from(it)
+        }
+        Spacer(Modifier.fillMaxWidth().weight(1f))
+        circleColorSelectionButton(Color.Blue) {
+            currentColor.value = HsvColor.from(it)
+        }
+        Spacer(Modifier.fillMaxWidth().weight(1f))
+        circleColorSelectionButton(Color.Magenta) {
+            currentColor.value = HsvColor.from(it)
+        }
+    }
+}
+
+
+@Composable
+fun colorSelectionBox(currentColor: MutableState<HsvColor>) {
     Box() {
+        val color = remember { currentColor }
         Column {
             Text(text = "Цвет:", color = Color.Black)
             Spacer(
                 modifier = Modifier.background(
-                    currentColor.value.toColor(),
+                    color.value.toColor(),
                     shape = RectangleShape
                 ).fillMaxWidth()
                     .height(20.dp)
             )
             Spacer(Modifier.fillMaxWidth().padding(10.dp))
-            ClassicColorPicker(
-                color = currentColor.value,
-                modifier = Modifier.fillMaxWidth().height(200.dp),
-                showAlphaBar = true,
-                onColorChanged = { hsvColor: HsvColor ->
-                    currentColor.value = hsvColor
-                })
+            Box() {
+                ClassicColorPicker(
+                    color = color.value,
+                    modifier = Modifier.fillMaxWidth().height(150.dp),
+                    showAlphaBar = false,
+                    onColorChanged = { hsvColor: HsvColor ->
+                        color.value = hsvColor
+                    })
+            }
+            Spacer(Modifier.fillMaxWidth().padding(10.dp))
+            colorStandardSelectionBox(currentColor)
         }
-
     }
 }

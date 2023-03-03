@@ -7,7 +7,6 @@ import androidx.compose.material.Button
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
@@ -22,9 +21,15 @@ fun ManualDialog(cancelClick: () -> Unit) {
         },
         title = { Text(text = "Инструкция Kivis") },
         text = {
+            Column {
+                Text(text = "1.Выбирите инструмент рисования в панеле инструментов или в меню;")
+                Text(text = "2.В открывшимся диалоговом окне настройте инструмент и подтвердите кнопкой\"Принять\";")
+                Text(text = "3.Нажмите мышью в место применения инструмента;")
+                Spacer(Modifier.width(20.dp))
 
+            }
         },
-        modifier = Modifier.width(300.dp),
+        modifier = Modifier.width(500.dp),
         buttons = {
             Button(
                 modifier = Modifier.padding(16.dp),

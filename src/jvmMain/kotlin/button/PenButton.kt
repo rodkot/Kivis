@@ -4,6 +4,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.TooltipArea
 import androidx.compose.foundation.TooltipPlacement
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.mouseClickable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -27,15 +28,7 @@ class PenButton(private val currentTool: MutableState<Tool>,
     private val viewDialog = mutableStateOf(false)
 
     override fun handleClick() {
-        viewDialog.value = true
-        //val i = currentImageBitmap.value
-//        val c = androidx.compose.ui.graphics.Canvas(currentImageBitmap.value)
-//        val paint = Paint()
-//
-//        paint.color =Color.White
-//        paint.style  = PaintingStyle.Fill
-//        c.drawCircle(Offset(50F ,50F), 50F, paint)
-        // currentTool.value = PenTool()
+        changeTool()
     }
 
     private fun changeTool(){
@@ -59,7 +52,7 @@ class PenButton(private val currentTool: MutableState<Tool>,
                     )
                 }
             },
-            modifier = Modifier.padding(start = 40.dp),
+            modifier = Modifier.padding(start = 40.dp).mouseClickable {  viewDialog.value = true  },
             delayMillis = 600,
             tooltipPlacement = TooltipPlacement.CursorPoint(
                 alignment = Alignment.BottomEnd

@@ -1,66 +1,12 @@
-package ru.nsu.ccfit.kivis.component
+package ru.nsu.ccfit.kivis.draw
 
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.*
+import ru.nsu.ccfit.kivis.component.PaintCanvas
 import java.util.*
 import java.util.function.Consumer
 import kotlin.collections.ArrayList
-import kotlin.math.abs
-
-fun PaintCanvas.drawLine(offsetA: Offset, offsetB: Offset, color: Color, brush: Int) {
-    val canvas = Canvas(image = image.value)
-    val paint = Paint()
-    paint.color = color
-    paint.style = PaintingStyle.Fill
-    //paint.blendMode = BlendMode.Darken
-    paint.alpha = 1f
-    paint.strokeWidth = 1f
-    when (brush) {
-        1 -> {
-            var (x, y) = offsetA.x.toInt() to offsetA.y.toInt()
-            val (dx, dy) = (offsetB.x.toInt() - x) to (offsetB.y.toInt() - y)
-
-            if (abs(dx) > abs(dy)) {
-                var err = -abs(dx)
-                for (i in 0 until abs(dx) step 1) {
-                    x = if (dx > 0) x + 1 else x - 1
-                    err += 2 * abs(dy)
-                    if (err > 0) {
-                        err -= 2 * abs(dx)
-                        y = if (dy > 0) y + 1 else y - 1
-                    }
-                    canvas.drawRect(Rect(Offset(x.toFloat(),y.toFloat()),Offset(x.toFloat()+1,y.toFloat()+1)),paint)
-                }
-
-            } else {
-                var err = -abs(dy)
-                for (i in 0 until abs(dy) step 1) {
-                    y = if (dy > 0) y + 1 else y - 1
-                    err += 2 * abs(dx)
-                    if (err > 0) {
-                        err -= 2 * abs(dy)
-                        x = if (dx > 0) x + 1 else x - 1
-                    }
-                    canvas.drawRect(Rect(Offset(x.toFloat(),y.toFloat()),Offset(x.toFloat()+1,y.toFloat()+1)),paint)
-                }
-            }
-        }
-        else -> {
-            paint.strokeWidth = brush.toFloat()
-            canvas.drawLine(offsetA, offsetB, paint)
-        }
-    }
-}
-
-fun PaintCanvas.drawPolygon(offsets: List<Offset>) {
-    var previous = offsets.first()
-    for (offset in offsets.subList(1, offsets.size)) {
-        drawLine(previous, offset, Color.Black, 1)
-        previous = offset
-    }
-    drawLine(previous, offsets.first(), Color.Black, 1)
-}
 
 data class Snapshot(
     val xl: Int,
@@ -78,10 +24,10 @@ fun PaintCanvas.findsSnapshot(snapshot: Snapshot, color: Color): List<Snapshot> 
         return snapshots
     }
 
-    if (snapshot.y < currentImage.height-1) {
+    if (snapshot.y < currentImage.height - 1) {
         currentImage.readPixels(pixelLine, 0, snapshot.y + 1, currentImage.width, 1)
         // Пиксели которые имеют тот же цвет что и область true
-      //  val upLine = pixelLine.map { Color(it) == color }
+        //  val upLine = pixelLine.map { Color(it) == color }
         var current = snapshot.xl
         if (pixelLine[current] == color.toArgb()) {
             while (current > 0 && pixelLine[current] == color.toArgb()) {
@@ -95,9 +41,8 @@ fun PaintCanvas.findsSnapshot(snapshot: Snapshot, color: Color): List<Snapshot> 
                     current++
                 }
                 val xr = current
-                snapshots.add(Snapshot(xl, xr-1, snapshot.y + 1))
-            }
-            else{
+                snapshots.add(Snapshot(xl, xr - 1, snapshot.y + 1))
+            } else {
                 while (current < currentImage.width && pixelLine[current] != color.toArgb()) {
                     current++
                 }
@@ -123,9 +68,8 @@ fun PaintCanvas.findsSnapshot(snapshot: Snapshot, color: Color): List<Snapshot> 
                     current++
                 }
                 val xr = current
-                snapshots.add(Snapshot(xl, xr-1, snapshot.y - 1))
-            }
-            else{
+                snapshots.add(Snapshot(xl, xr - 1, snapshot.y - 1))
+            } else {
                 while (current < currentImage.width && pixelLine[current] != color.toArgb()) {
                     current++
                 }
@@ -141,18 +85,18 @@ fun PaintCanvas.findFirstSnapshot(offset: Offset): Pair<Snapshot, Color> {
     val currentImage = image.value
     val pixelLine = IntArray(currentImage.width)
     currentImage.readPixels(pixelLine, 0, offset.y.toInt(), currentImage.width, 1)
-    val areaColor = Color(pixelLine[offset.x.toInt()])
+    val areaColor = pixelLine[offset.x.toInt()]
     // Пиксели которые имеют тот же цвет что и область true
-    val line = pixelLine.map { Color(it) == areaColor }
+    //val line = pixelLine.map { Color(it) == areaColor }
     var (xl, xr) = offset.x.toInt() to offset.x.toInt()
 
-    while (xl >= 0 && line[xl]) {
+    while (xl >= 0 && pixelLine[xl] == areaColor) {
         xl--
     }
-    while (xr < currentImage.width && line[xr]) {
+    while (xr < currentImage.width && pixelLine[xr] == areaColor) {
         xr++
     }
-    return Snapshot(xl + 1, xr - 1, offset.y.toInt()) to areaColor
+    return Snapshot(xl + 1, xr - 1, offset.y.toInt()) to Color(areaColor)
 }
 
 fun PaintCanvas.fill(offset: Offset, targetColor: Color) {
@@ -161,16 +105,17 @@ fun PaintCanvas.fill(offset: Offset, targetColor: Color) {
     val p = findFirstSnapshot(offset)
     val areaColor = p.second
     snapshots.push(p.first)
-
+    if (areaColor == targetColor) {
+        return
+    }
     while (!snapshots.empty()) {
         val currentSnapshot = snapshots.pop()
         findsSnapshot(currentSnapshot, areaColor).forEach(Consumer { snapshots.push(it) })
-        println(snapshots.size)
         drawLine(
-            Offset(currentSnapshot.xl.toFloat()-1, currentSnapshot.y.toFloat()),
-            Offset(currentSnapshot.xr.toFloat(), currentSnapshot.y.toFloat()), targetColor  , 1)
+            Offset(currentSnapshot.xl.toFloat() - 1, currentSnapshot.y.toFloat()),
+            Offset(currentSnapshot.xr.toFloat(), currentSnapshot.y.toFloat()), targetColor, 1
+        )
     }
-
 }
 
 fun PaintCanvas.clear() {

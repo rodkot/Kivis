@@ -10,12 +10,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asSkiaBitmap
 import androidx.compose.ui.unit.dp
+import org.jetbrains.skiko.toBufferedImage
 import ru.nsu.ccfit.kivis.component.Menu
 import ru.nsu.ccfit.kivis.component.PaintCanvas
 import ru.nsu.ccfit.kivis.component.ToolBar
 import ru.nsu.ccfit.kivis.dialog.*
 import ru.nsu.ccfit.kivis.tool.*
+import java.io.File
+import java.io.IOException
+import javax.imageio.ImageIO
 
 class MainWindowController {
     companion object {
@@ -25,13 +30,14 @@ class MainWindowController {
         val currentPolygonTool = mutableStateOf(PolygonTool())
         val currentFillTool = mutableStateOf(FillTool())
 
-        private val image = mutableStateOf(ImageBitmap(10, 10, hasAlpha = false))
+        val image = mutableStateOf(ImageBitmap(10, 10, hasAlpha = false))
         var isPaint = mutableStateOf(false)
 
         val toolBar = ToolBar(currentTool, currentPenTool, currentFillTool, currentPolygonTool)
         val canvas = PaintCanvas(image, isPaint)
     }
 }
+
 var previousClick: Pair<Offset, Offset> = Offset(0f, 0f) to Offset(0f, 0f)
 
 @Composable
@@ -43,6 +49,7 @@ fun MainWindow() {
         modifier = Modifier.fillMaxWidth()
     ) {
         val dialogAbout = remember { Menu.Controller.about }
+        val saveAction = remember { Menu.Controller.save }
         val dialogManual = remember { Menu.Controller.instruction }
         val dialogTool = remember { Menu.Controller.tool }
 
@@ -72,6 +79,7 @@ fun MainWindow() {
                     { dialogTool.value = "TODO" })
             }
 
+
             FillTool.name -> {
                 FillDialog(MainWindowController.currentFillTool,
                     { MainWindowController.currentTool.value = MainWindowController.currentFillTool.value },
@@ -80,6 +88,22 @@ fun MainWindow() {
 
             TrashTool.name -> {
                 MainWindowController.currentTool.value = TrashTool()
+            }
+        }
+
+        if (saveAction.value) {
+            FileDialog {
+                if (it != null) {
+                    val output = File(it.plus(".png"))
+                    output.createNewFile()
+
+                    try {
+                        ImageIO.write(MainWindowController.image.value.asSkiaBitmap().toBufferedImage(), "PNG", output)
+                    } catch (e: IOException) {
+                        println(e.message)
+                    }
+                }
+                saveAction.value = false
             }
         }
 
