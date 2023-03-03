@@ -3,15 +3,14 @@ package ru.nsu.ccfit.kivis
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.asSkiaBitmap
+import androidx.compose.ui.graphics.*
 import androidx.compose.ui.unit.dp
 import org.jetbrains.skiko.toBufferedImage
 import ru.nsu.ccfit.kivis.component.Menu
@@ -19,6 +18,7 @@ import ru.nsu.ccfit.kivis.component.PaintCanvas
 import ru.nsu.ccfit.kivis.component.ToolBar
 import ru.nsu.ccfit.kivis.dialog.*
 import ru.nsu.ccfit.kivis.tool.*
+import java.awt.image.BufferedImage
 import java.io.File
 import java.io.IOException
 import javax.imageio.ImageIO
@@ -31,7 +31,7 @@ class MainWindowController {
         val currentPolygonTool = mutableStateOf(PolygonTool())
         val currentFillTool = mutableStateOf(FillTool())
 
-        val image = mutableStateOf(ImageBitmap(10, 10, hasAlpha = false))
+        val image = mutableStateOf(BufferedImage(10, 10, 10))
         var isPaint = mutableStateOf(false)
 
         val toolBar = ToolBar(currentTool, currentPenTool, currentFillTool, currentPolygonTool)
@@ -58,38 +58,6 @@ fun MainWindow() {
         Box(Modifier.fillMaxWidth()) {
             MainWindowController.toolBar.render()
         }
-//        Box(Modifier.fillMaxSize().padding(10.dp)) {
-//            val stateVertical = rememberScrollState(0)
-//            val stateHorizontal = rememberScrollState(0)
-//            Box(
-//                Modifier.fillMaxSize().padding(10.dp)
-//                    .verticalScroll(stateVertical)
-//                    .padding(end = 12.dp, bottom = 12.dp)
-//                    .horizontalScroll(stateHorizontal)
-//            ) {
-//
-//                    if (click.value != previousClick)
-//                        s.draw(MainWindowController.canvas)
-//                    previousClick = click.value
-//
-//                    MainWindowController.canvas.render()
-//
-//
-//
-//            }
-//            VerticalScrollbar(
-//                modifier = Modifier.align(Alignment.CenterEnd)
-//                    .fillMaxHeight()
-//                    .padding(end = 12.dp),
-//                adapter = rememberScrollbarAdapter(stateVertical)
-//            )
-//            HorizontalScrollbar(
-//                modifier = Modifier.align(Alignment.BottomStart)
-//                    .fillMaxWidth()
-//                    .padding(end = 12.dp),
-//                adapter = rememberScrollbarAdapter(stateHorizontal)
-//            )
-//        }
 
         Box(Modifier.fillMaxSize().background(Color.Gray)) {
             val stateVertical = rememberScrollState(0)
@@ -113,12 +81,13 @@ fun MainWindow() {
             VerticalScrollbar(
                 modifier = Modifier.align(Alignment.CenterEnd)
                     .fillMaxHeight(),
-                adapter = rememberScrollbarAdapter(stateVertical)
+                adapter = rememberScrollbarAdapter(stateVertical),
+                style = ru.nsu.ccfit.kivis.component.defaultScrollbarStyle()
             )
             HorizontalScrollbar(
                 modifier = Modifier.align(Alignment.BottomStart)
-                    .fillMaxWidth()
-                    .padding(end = 12.dp),
+                    .fillMaxWidth(),
+                style = ru.nsu.ccfit.kivis.component.defaultScrollbarStyle(),
                 adapter = rememberScrollbarAdapter(stateHorizontal)
             )
 
@@ -156,7 +125,7 @@ fun MainWindow() {
                     output.createNewFile()
 
                     try {
-                        ImageIO.write(MainWindowController.image.value.asSkiaBitmap().toBufferedImage(), "PNG", output)
+                        ImageIO.write(MainWindowController.image.value, "PNG", output)
                     } catch (e: IOException) {
                         println(e.message)
                     }

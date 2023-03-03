@@ -1,7 +1,6 @@
 package ru.nsu.ccfit.kivis.component
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -14,28 +13,30 @@ import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.colorspace.ColorSpaces
 import androidx.compose.ui.input.pointer.*
 import androidx.compose.ui.unit.dp
+import java.awt.Graphics2D
+import java.awt.image.BufferedImage
+import java.awt.image.BufferedImage.TYPE_INT_RGB
 
 
 class PaintCanvas(
-    val image: MutableState<ImageBitmap>,
+    val image: MutableState<BufferedImage>,
     private val isPaint: MutableState<Boolean>
 ) : Renderable {
     val offsetClick = mutableStateOf(Offset(0f, 0f) to Offset(0f, 0f))
     var offsetPress = (Offset(0F, 0F))
     var offsetRelease = (Offset(0F, 0F))
 
-    private fun initCanvas(weight: Int, height: Int): ImageBitmap {
-        val preBitmap = ImageBitmap(
-            width = weight,
-            height = height,
-            config = ImageBitmapConfig.Argb8888,
-            colorSpace = ColorSpaces.Srgb
+    private fun initCanvas(weight: Int, height: Int): BufferedImage {
+        val preBitmap = BufferedImage(
+            weight,
+            height,
+            TYPE_INT_RGB
         )
-        val canvas = Canvas(image = preBitmap)
-        val paint = Paint()
-        paint.color = Color.White
-        paint.style = PaintingStyle.Fill
-        canvas.drawRect(Rect(Offset(0F, 0F), Offset(weight.toFloat(), height.toFloat())), paint)
+        val graphics: Graphics2D = preBitmap.createGraphics()
+        graphics.background = java.awt.Color.WHITE
+        graphics.clearRect(0, 0, preBitmap.width, preBitmap.height)
+        graphics.dispose()
+
         return preBitmap
     }
 
@@ -61,7 +62,7 @@ class PaintCanvas(
                 isPaint.value = true
                 image.value = initCanvas(size.width.toInt(), size.height.toInt())
             }
-            drawImage(image = image.value)
+            drawImage(image = image.value.toComposeImageBitmap())
         }
     }
 }

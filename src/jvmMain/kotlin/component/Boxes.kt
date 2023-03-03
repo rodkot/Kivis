@@ -1,9 +1,11 @@
 package ru.nsu.ccfit.kivis.component
 
+import androidx.compose.foundation.ScrollbarStyle
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Slider
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -163,3 +165,12 @@ fun colorSelectionBox(currentColor: MutableState<HsvColor>) {
         }
     }
 }
+
+fun defaultScrollbarStyle() = ScrollbarStyle(
+    minimalHeight = 16.dp,
+    thickness = 10.dp,
+    shape = RoundedCornerShape(5.dp),
+    hoverDurationMillis = 300,
+    unhoverColor = Color.Gray,
+    hoverColor = Color.Gray.copy(alpha = 0.7f)
+)

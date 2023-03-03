@@ -1,12 +1,11 @@
 package ru.nsu.ccfit.kivis.draw
 
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.*
 import ru.nsu.ccfit.kivis.component.PaintCanvas
+import java.awt.Graphics2D
 import java.util.*
 import java.util.function.Consumer
-import kotlin.collections.ArrayList
 
 data class Snapshot(
     val xl: Int,
@@ -19,13 +18,13 @@ fun PaintCanvas.findsSnapshot(snapshot: Snapshot, color: Color): List<Snapshot> 
     val currentImage = image.value
     val pixelLine = IntArray(currentImage.width)
 
-    currentImage.readPixels(pixelLine, 0, snapshot.y, currentImage.width, 1)
+    currentImage.getRGB(0, snapshot.y, currentImage.width, 1,pixelLine,0,0)
     if (Color(pixelLine[snapshot.xl]) != color) {
         return snapshots
     }
 
     if (snapshot.y < currentImage.height - 1) {
-        currentImage.readPixels(pixelLine, 0, snapshot.y + 1, currentImage.width, 1)
+        currentImage.getRGB(0, snapshot.y+1, currentImage.width, 1,pixelLine,0,0)
         // Пиксели которые имеют тот же цвет что и область true
         //  val upLine = pixelLine.map { Color(it) == color }
         var current = snapshot.xl
@@ -52,7 +51,7 @@ fun PaintCanvas.findsSnapshot(snapshot: Snapshot, color: Color): List<Snapshot> 
     }
 
     if (snapshot.y > 0) {
-        currentImage.readPixels(pixelLine, 0, snapshot.y - 1, currentImage.width, 1)
+        currentImage.getRGB(0, snapshot.y-1, currentImage.width, 1,pixelLine,0,0)
         // Пиксели которые имеют тот же цвет что и область true
         //  val upLine = pixelLine.map { Color(it) == color }
         var current = snapshot.xl
@@ -77,14 +76,13 @@ fun PaintCanvas.findsSnapshot(snapshot: Snapshot, color: Color): List<Snapshot> 
 
         }
     }
-
     return snapshots
 }
 
 fun PaintCanvas.findFirstSnapshot(offset: Offset): Pair<Snapshot, Color> {
     val currentImage = image.value
     val pixelLine = IntArray(currentImage.width)
-    currentImage.readPixels(pixelLine, 0, offset.y.toInt(), currentImage.width, 1)
+    currentImage.getRGB(0, offset.y.toInt(), currentImage.width, 1,pixelLine,0,0)
     val areaColor = pixelLine[offset.x.toInt()]
     // Пиксели которые имеют тот же цвет что и область true
     //val line = pixelLine.map { Color(it) == areaColor }
@@ -119,9 +117,8 @@ fun PaintCanvas.fill(offset: Offset, targetColor: Color) {
 }
 
 fun PaintCanvas.clear() {
-    val canvas = Canvas(image = image.value)
-    val paint = Paint()
-    paint.color = Color.White
-    paint.style = PaintingStyle.Fill
-    canvas.drawRect(Rect(Offset(0F, 0F), Offset(image.value.width.toFloat(), image.value.height.toFloat())), paint)
+    val graphics: Graphics2D = image.value.createGraphics()
+    graphics.background = java.awt.Color.WHITE
+    graphics.clearRect(0, 0, image.value.width, image.value.height)
+    graphics.dispose()
 }
