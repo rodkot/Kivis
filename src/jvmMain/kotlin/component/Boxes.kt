@@ -171,6 +171,6 @@ fun defaultScrollbarStyle() = ScrollbarStyle(
     thickness = 10.dp,
     shape = RoundedCornerShape(5.dp),
     hoverDurationMillis = 300,
-    unhoverColor = Color.Gray,
-    hoverColor = Color.Gray.copy(alpha = 0.7f)
+    unhoverColor = Color.Black,
+    hoverColor = Color.Black.copy(alpha = 0.7f)
 )

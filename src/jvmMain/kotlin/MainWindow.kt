@@ -3,7 +3,6 @@ package ru.nsu.ccfit.kivis
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -11,8 +10,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.*
-import androidx.compose.ui.unit.dp
-import org.jetbrains.skiko.toBufferedImage
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.unit.IntSize
 import ru.nsu.ccfit.kivis.component.Menu
 import ru.nsu.ccfit.kivis.component.PaintCanvas
 import ru.nsu.ccfit.kivis.component.ToolBar
@@ -31,11 +30,12 @@ class MainWindowController {
         val currentPolygonTool = mutableStateOf(PolygonTool())
         val currentFillTool = mutableStateOf(FillTool())
 
-        val image = mutableStateOf(BufferedImage(10, 10, 10))
+        val image = mutableStateOf(BufferedImage(100, 100, BufferedImage.TYPE_INT_RGB))
+        var size =   mutableStateOf(IntSize.Zero)
         var isPaint = mutableStateOf(false)
 
         val toolBar = ToolBar(currentTool, currentPenTool, currentFillTool, currentPolygonTool)
-        val canvas = PaintCanvas(image, isPaint)
+        val canvas = PaintCanvas(image, size,isPaint)
     }
 }
 
@@ -69,6 +69,7 @@ fun MainWindow() {
                     .verticalScroll(stateVertical)
                     // .padding(end = 12.dp, bottom = 12.dp)
                     .horizontalScroll(stateHorizontal)
+                    .onSizeChanged { MainWindowController.size.value = it}
             ) {
                 if (click.value != previousClick)
                     s.draw(MainWindowController.canvas)
@@ -76,7 +77,6 @@ fun MainWindow() {
 
                 MainWindowController.canvas.render()
             }
-
 
             VerticalScrollbar(
                 modifier = Modifier.align(Alignment.CenterEnd)
@@ -90,56 +90,61 @@ fun MainWindow() {
                 style = ru.nsu.ccfit.kivis.component.defaultScrollbarStyle(),
                 adapter = rememberScrollbarAdapter(stateHorizontal)
             )
-
-        }
-        when (dialogTool.value) {
-            PenTool.name -> {
-                PenDialog(MainWindowController.currentPenTool,
-                    {
-                        MainWindowController.currentTool.value = MainWindowController.currentPenTool.value
-                    }) { dialogTool.value = "TOOL" }
-            }
-
-            PolygonTool.name -> {
-                PolygonDialog(MainWindowController.currentPolygonTool,
-                    { MainWindowController.currentTool.value = MainWindowController.currentPolygonTool.value },
-                    { dialogTool.value = "TODO" })
-            }
-
-
-            FillTool.name -> {
-                FillDialog(MainWindowController.currentFillTool,
-                    { MainWindowController.currentTool.value = MainWindowController.currentFillTool.value },
-                    { dialogTool.value = "TODO" })
-            }
-
-            TrashTool.name -> {
-                MainWindowController.currentTool.value = TrashTool()
-            }
-        }
-
-        if (saveAction.value) {
-            FileDialog {
-                if (it != null) {
-                    val output = File(it.plus(".png"))
-                    output.createNewFile()
-
-                    try {
-                        ImageIO.write(MainWindowController.image.value, "PNG", output)
-                    } catch (e: IOException) {
-                        println(e.message)
-                    }
+            when (dialogTool.value) {
+                PenTool.name -> {
+                    PenDialog(MainWindowController.currentPenTool,
+                        {
+                            MainWindowController.currentTool.value = MainWindowController.currentPenTool.value
+                        }) { dialogTool.value = "TOOL" }
                 }
-                saveAction.value = false
+
+                PolygonTool.name -> {
+                    PolygonDialog(MainWindowController.currentPolygonTool,
+                        { MainWindowController.currentTool.value = MainWindowController.currentPolygonTool.value },
+                        { dialogTool.value = "TODO" })
+                }
+
+
+                FillTool.name -> {
+                    FillDialog(MainWindowController.currentFillTool,
+                        { MainWindowController.currentTool.value = MainWindowController.currentFillTool.value },
+                        { dialogTool.value = "TODO" })
+                }
+
+                TrashTool.name -> {
+                    MainWindowController.currentTool.value = TrashTool()
+                }
+
+                ExpansionTool.name -> {
+                    MainWindowController.currentTool.value = ExpansionTool()
+
+                }
+            }
+
+            if (saveAction.value) {
+                FileDialog {
+                    if (it != null) {
+                        val output = File(it.plus(".png"))
+                        output.createNewFile()
+
+                        try {
+                            ImageIO.write(MainWindowController.image.value, "PNG", output)
+                        } catch (e: IOException) {
+                            println(e.message)
+                        }
+                    }
+                    saveAction.value = false
+                }
+            }
+
+            if (dialogAbout.value) {
+                AboutDialog { dialogAbout.value = false }
+            }
+
+            if (dialogManual.value) {
+                ManualDialog { dialogManual.value = false }
             }
         }
 
-        if (dialogAbout.value) {
-            AboutDialog { dialogAbout.value = false }
-        }
-
-        if (dialogManual.value) {
-            ManualDialog { dialogManual.value = false }
-        }
     }
 }

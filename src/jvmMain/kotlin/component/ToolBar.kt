@@ -1,17 +1,12 @@
 package ru.nsu.ccfit.kivis.component
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import ru.nsu.ccfit.kivis.button.FillButton
-import ru.nsu.ccfit.kivis.button.TrashButton
-import ru.nsu.ccfit.kivis.button.PenButton
-import ru.nsu.ccfit.kivis.button.PolygonButton
+import ru.nsu.ccfit.kivis.button.*
 import ru.nsu.ccfit.kivis.tool.*
 
 
@@ -22,7 +17,6 @@ class ToolBar(
     private val currentPolygonTool: MutableState<PolygonTool>
 ) : Renderable {
 
-    @OptIn(ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)
     @Composable
     override fun render() {
         TopAppBar(title = {
@@ -43,23 +37,20 @@ class ToolBar(
                     is TrashTool -> {
                         Text(TrashTool.name)
                     }
+
+                    is ExpansionTool -> {
+                        Text(ExpansionTool.name)
+                    }
                 }
             }
         }, modifier = Modifier.fillMaxWidth(),
             actions = {
                 Row {
-                    // Box(modifier = if (currentTool.value is PenTool) Modifier.background(Color.Blue) else Modifier){
-//                    Box(modifier = Modifier.mouseClickable { println(buttons.isSecondaryPressed) }) {
-//                        PenButton(currentTool, currentPenTool).render()
-//                    }
-
-                        PenButton(currentTool, currentPenTool).render()
-
-
-                    //}
+                    PenButton(currentTool, currentPenTool).render()
                     PolygonButton(currentTool, currentPolygonTool).render()
                     FillButton(currentTool, currentFillTool).render()
                     TrashButton(currentTool).render()
+                    ExpansionButton(currentTool).render()
                 }
             })
     }
