@@ -85,7 +85,7 @@ fun PaintCanvas.findFirstSnapshot(offset: Offset): Pair<Snapshot, Color> {
     currentImage.getRGB(0, offset.y.toInt(), currentImage.width, 1,pixelLine,0,0)
     val areaColor = pixelLine[offset.x.toInt()]
     // Пиксели которые имеют тот же цвет что и область true
-    //val line = pixelLine.map { Color(it) == areaColor }
+
     var (xl, xr) = offset.x.toInt() to offset.x.toInt()
 
     while (xl >= 0 && pixelLine[xl] == areaColor) {

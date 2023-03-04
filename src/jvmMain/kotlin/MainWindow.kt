@@ -24,18 +24,14 @@ import javax.imageio.ImageIO
 
 class MainWindowController {
     companion object {
-        val currentTool = mutableStateOf<Tool>(PenTool())
-
-        val currentPenTool = mutableStateOf(PenTool())
-        val currentPolygonTool = mutableStateOf(PolygonTool())
-        val currentFillTool = mutableStateOf(FillTool())
+        val currentTool = mutableStateOf<Tool>(PenTool)
 
         val image = mutableStateOf(BufferedImage(100, 100, BufferedImage.TYPE_INT_RGB))
-        var size =   mutableStateOf(IntSize.Zero)
+        var size = mutableStateOf(IntSize.Zero)
         var isPaint = mutableStateOf(false)
 
-        val toolBar = ToolBar(currentTool, currentPenTool, currentFillTool, currentPolygonTool)
-        val canvas = PaintCanvas(image, size,isPaint)
+        val toolBar = ToolBar(currentTool)
+        val canvas = PaintCanvas(image, size, isPaint)
     }
 }
 
@@ -52,7 +48,7 @@ fun MainWindow() {
         val dialogAbout = remember { Menu.Controller.about }
         val saveAction = remember { Menu.Controller.save }
         val dialogManual = remember { Menu.Controller.instruction }
-        val dialogTool = remember { Menu.Controller.tool }
+        Menu.Controller.tool = MainWindowController.currentTool
 
         val click = remember { MainWindowController.canvas.offsetClick }
         Box(Modifier.fillMaxWidth()) {
@@ -69,7 +65,7 @@ fun MainWindow() {
                     .verticalScroll(stateVertical)
                     // .padding(end = 12.dp, bottom = 12.dp)
                     .horizontalScroll(stateHorizontal)
-                    .onSizeChanged { MainWindowController.size.value = it}
+                    .onSizeChanged { MainWindowController.size.value = it }
             ) {
                 if (click.value != previousClick)
                     s.draw(MainWindowController.canvas)
@@ -90,36 +86,6 @@ fun MainWindow() {
                 style = ru.nsu.ccfit.kivis.component.defaultScrollbarStyle(),
                 adapter = rememberScrollbarAdapter(stateHorizontal)
             )
-            when (dialogTool.value) {
-                PenTool.name -> {
-                    PenDialog(MainWindowController.currentPenTool,
-                        {
-                            MainWindowController.currentTool.value = MainWindowController.currentPenTool.value
-                        }) { dialogTool.value = "TOOL" }
-                }
-
-                PolygonTool.name -> {
-                    PolygonDialog(MainWindowController.currentPolygonTool,
-                        { MainWindowController.currentTool.value = MainWindowController.currentPolygonTool.value },
-                        { dialogTool.value = "TODO" })
-                }
-
-
-                FillTool.name -> {
-                    FillDialog(MainWindowController.currentFillTool,
-                        { MainWindowController.currentTool.value = MainWindowController.currentFillTool.value },
-                        { dialogTool.value = "TODO" })
-                }
-
-                TrashTool.name -> {
-                    MainWindowController.currentTool.value = TrashTool()
-                }
-
-                ExpansionTool.name -> {
-                    MainWindowController.currentTool.value = ExpansionTool()
-
-                }
-            }
 
             if (saveAction.value) {
                 FileDialog {
@@ -145,6 +111,5 @@ fun MainWindow() {
                 ManualDialog { dialogManual.value = false }
             }
         }
-
     }
 }

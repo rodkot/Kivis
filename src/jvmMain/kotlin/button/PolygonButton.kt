@@ -25,8 +25,7 @@ import ru.nsu.ccfit.kivis.tool.PolygonTool
 import ru.nsu.ccfit.kivis.tool.Tool
 
 class PolygonButton(
-    private val currentTool: MutableState<Tool>,
-    private val currentPolygonTool: MutableState<PolygonTool>
+    private val currentTool: MutableState<Tool>
 ) : Button() {
     private val name: String = "Многоугольник"
     private val viewDialog = mutableStateOf(false)
@@ -36,7 +35,7 @@ class PolygonButton(
     }
 
     private fun changeTool() {
-        currentTool.value = currentPolygonTool.value
+        currentTool.value = PolygonTool
     }
 
     @OptIn(ExperimentalFoundationApi::class)
@@ -65,7 +64,7 @@ class PolygonButton(
                 Icon(FeatherIcons.MinusSquare, contentDescription = "Localized description")
             }
             if (dialog.value) {
-                PolygonDialog(currentPolygonTool, { changeTool() }, { dialog.value = false })
+                PolygonDialog({ changeTool() }, { dialog.value = false })
             }
         }
     }

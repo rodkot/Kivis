@@ -13,12 +13,12 @@ import ru.nsu.ccfit.kivis.tool.FillTool
 @OptIn(ExperimentalMaterialApi::class)
 @Preview
 @Composable
-fun FillDialog(default: MutableState<FillTool>,confirmClick: () -> Unit, cancelClick: () -> Unit) {
-    val currentColor = mutableStateOf(HsvColor.from(default.value.color))
+fun FillDialog(confirmClick: () -> Unit, cancelClick: () -> Unit) {
+     val currentColor = mutableStateOf(HsvColor.from(FillTool.color))
 
     AlertDialog(
         onDismissRequest = {
-            // cancelClick.invoke()
+
         },
         title = { Text(text = "Настройка инстумента ${FillTool.name}") },
         text = {
@@ -34,7 +34,8 @@ fun FillDialog(default: MutableState<FillTool>,confirmClick: () -> Unit, cancelC
                 Button(
                     modifier = Modifier.weight(1f).padding(8.dp),
                     onClick = {
-                        default.value = FillTool(currentColor.value.toColor())
+                        FillTool.color = currentColor.value.toColor()
+
                         confirmClick.invoke()
                         cancelClick.invoke()
                     }

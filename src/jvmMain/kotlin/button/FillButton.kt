@@ -25,7 +25,7 @@ import ru.nsu.ccfit.kivis.dialog.FillDialog
 import ru.nsu.ccfit.kivis.tool.FillTool
 import ru.nsu.ccfit.kivis.tool.Tool
 
-class FillButton(private val currentTool: MutableState<Tool>, private val currentFillTool: MutableState<FillTool>) : Button() {
+class FillButton(private val currentTool: MutableState<Tool>) : Button() {
     private val name: String = "Заливка"
     private val viewDialog = mutableStateOf(false)
 
@@ -34,7 +34,7 @@ class FillButton(private val currentTool: MutableState<Tool>, private val curren
     }
 
     private fun changeTool() {
-        currentTool.value = currentFillTool.value
+        currentTool.value = FillTool
     }
 
     @OptIn(ExperimentalFoundationApi::class)
@@ -64,7 +64,7 @@ class FillButton(private val currentTool: MutableState<Tool>, private val curren
                 Icon(FeatherIcons.Droplet, contentDescription = "Localized description")
             }
             if (dialog.value) {
-                FillDialog(currentFillTool,{ changeTool() }, { dialog.value = false })
+                FillDialog({ changeTool() }, { dialog.value = false })
             }
         }
 

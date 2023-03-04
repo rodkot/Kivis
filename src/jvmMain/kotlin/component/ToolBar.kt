@@ -11,44 +11,21 @@ import ru.nsu.ccfit.kivis.tool.*
 
 
 class ToolBar(
-    private val currentTool: MutableState<Tool>,
-    private val currentPenTool: MutableState<PenTool>,
-    private val currentFillTool: MutableState<FillTool>,
-    private val currentPolygonTool: MutableState<PolygonTool>
+    private val currentTool: MutableState<Tool>
 ) : Renderable {
 
     @Composable
     override fun render() {
         TopAppBar(title = {
             Row {
-                when (currentTool.value) {
-                    is PenTool -> {
-                        Text(PenTool.name)
-                    }
-
-                    is PolygonTool -> {
-                        Text(PolygonTool.name)
-                    }
-
-                    is FillTool -> {
-                        Text(FillTool.name)
-                    }
-
-                    is TrashTool -> {
-                        Text(TrashTool.name)
-                    }
-
-                    is ExpansionTool -> {
-                        Text(ExpansionTool.name)
-                    }
-                }
+                Text(currentTool.value.getNameTool())
             }
         }, modifier = Modifier.fillMaxWidth(),
             actions = {
                 Row {
-                    PenButton(currentTool, currentPenTool).render()
-                    PolygonButton(currentTool, currentPolygonTool).render()
-                    FillButton(currentTool, currentFillTool).render()
+                    PenButton(currentTool).render()
+                    PolygonButton(currentTool).render()
+                    FillButton(currentTool).render()
                     TrashButton(currentTool).render()
                     ExpansionButton(currentTool).render()
                 }

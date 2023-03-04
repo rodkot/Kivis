@@ -20,7 +20,6 @@ fun main() = application {
         onCloseRequest = ::exitApplication,
         title = "Kivis",
         icon = painterResource("kivi_logo.png"),
-      //  resizable = false,
         state = WindowState(
             position = WindowPosition.Aligned(Alignment.Center),
             width = SizeWindows.width().dp,

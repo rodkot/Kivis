@@ -23,7 +23,7 @@ class TrashButton(private val currentTool: MutableState<Tool>) : Button() {
 
 
     override fun handleClick() {
-        currentTool.value = TrashTool()
+        currentTool.value = TrashTool
     }
 
     @OptIn(ExperimentalFoundationApi::class)

@@ -6,14 +6,10 @@ import ru.nsu.ccfit.kivis.draw.drawPolygon
 import kotlin.math.cos
 import kotlin.math.sin
 
-class PolygonTool(
-    val countVertices: Int = 3,
-    val radius: Float = 10f,
-    val rotation: Float = 0f
-) : Tool() {
-    companion object {
-        const val name: String = "Многоугольник"
-    }
+object PolygonTool : Tool("Многоугольник") {
+    var countVertices: Int = 3
+    var radius: Float = 10f
+    var rotation: Float = 0f
 
     override fun draw(paintCanvas: PaintCanvas) {
         paintCanvas.drawPolygon(getOffsetsPolygon(paintCanvas.offsetPress))

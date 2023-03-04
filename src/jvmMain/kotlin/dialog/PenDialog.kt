@@ -14,9 +14,9 @@ import ru.nsu.ccfit.kivis.tool.PenTool
 @OptIn(ExperimentalMaterialApi::class)
 @Preview
 @Composable
-fun PenDialog(default: MutableState<PenTool>,confirmClick: () -> Unit, cancelClick: () -> Unit) {
-    val currentColor = mutableStateOf(HsvColor.from(default.value.color))
-    val branch = mutableStateOf(default.value.brash.toFloat())
+fun PenDialog(confirmClick: () -> Unit, cancelClick: () -> Unit) {
+    val currentColor = mutableStateOf(HsvColor.from(PenTool.color))
+    val branch = mutableStateOf(PenTool.brash.toFloat())
 
     AlertDialog(
         onDismissRequest = {
@@ -38,7 +38,10 @@ fun PenDialog(default: MutableState<PenTool>,confirmClick: () -> Unit, cancelCli
                 Button(
                     modifier = Modifier.weight(1f).padding(8.dp),
                     onClick = {
-                        default.value = PenTool(branch.value.toInt(), currentColor.value.toColor())
+
+                        PenTool.brash = branch.value.toInt()
+                        PenTool.color = currentColor.value.toColor()
+
                         confirmClick.invoke()
                         cancelClick.invoke()
                     }

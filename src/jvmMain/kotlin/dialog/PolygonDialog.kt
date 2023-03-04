@@ -12,10 +12,10 @@ import ru.nsu.ccfit.kivis.tool.PolygonTool
 @OptIn(ExperimentalMaterialApi::class)
 @Preview
 @Composable
-fun PolygonDialog(default: MutableState<PolygonTool>, confirmClick: () -> Unit, cancelClick: () -> Unit) {
-    val countVertices = mutableStateOf(default.value.countVertices.toFloat())
-    val radius = mutableStateOf(default.value.radius)
-    val rotation = mutableStateOf(default.value.rotation)
+fun PolygonDialog(confirmClick: () -> Unit, cancelClick: () -> Unit) {
+    val countVertices = mutableStateOf(PolygonTool.countVertices.toFloat())
+    val radius = mutableStateOf(PolygonTool.radius)
+    val rotation = mutableStateOf(PolygonTool.rotation)
 
     AlertDialog(
         onDismissRequest = {
@@ -24,7 +24,7 @@ fun PolygonDialog(default: MutableState<PolygonTool>, confirmClick: () -> Unit, 
         title = { Text(text = "Настройка инстумента ${PolygonTool.name}") },
         text = {
             Column {
-                countVerticesBox(countVertices, 3f..13f,10 )
+                countVerticesBox(countVertices, 3f..13f, 10)
                 Spacer(Modifier.height(10.dp))
                 rotationBox(rotation, 0f..360f, 360)
                 Spacer(Modifier.height(10.dp))
@@ -39,12 +39,10 @@ fun PolygonDialog(default: MutableState<PolygonTool>, confirmClick: () -> Unit, 
                 Button(
                     modifier = Modifier.weight(1f).padding(8.dp),
                     onClick = {
-                        default.value =
-                            PolygonTool(
-                                rotation = rotation.value,
-                                radius = radius.value,
-                                countVertices = countVertices.value.toInt()
-                            )
+
+                        PolygonTool.rotation = rotation.value
+                        PolygonTool.radius = radius.value
+                        PolygonTool.countVertices = countVertices.value.toInt()
 
                         confirmClick.invoke()
                         cancelClick.invoke()

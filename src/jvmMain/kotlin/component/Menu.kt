@@ -14,6 +14,7 @@ class Menu() {
     @OptIn(ExperimentalComposeUiApi::class)
     @Composable
     fun render(frameWindowScope: FrameWindowScope) {
+       // var isSubmenuShowing = remember { mutableStateOf(false) }
         frameWindowScope.MenuBar {
             Menu("Файл", mnemonic = 'F') {
                 Item(
@@ -23,13 +24,41 @@ class Menu() {
                 )
             }
             Menu("Инструменты", mnemonic = 'I') {
-                RadioButtonItem(PenTool.name, selected = true, onClick = { Controller.tool.value = PenTool.name })
-                Separator()
-                Item(PolygonTool.name, onClick = { Controller.tool.value = PolygonTool.name })
-                Separator()
-                Item(TrashTool.name, onClick = { Controller.tool.value = TrashTool.name })
-                Separator()
-                Item(FillTool.name, onClick = { Controller.tool.value = FillTool.name })
+                CheckboxItem(
+                    PenTool.name,
+                    checked = Controller.tool.value is PenTool,
+                    onCheckedChange = {
+                        Controller.tool.value = PenTool
+                    }
+                )
+                CheckboxItem(
+                    PolygonTool.name,
+                    checked = Controller.tool.value is PolygonTool,
+                    onCheckedChange = {
+                        Controller.tool.value = PolygonTool
+                    }
+                )
+                CheckboxItem(
+                    FillTool.name,
+                    checked = Controller.tool.value is FillTool,
+                    onCheckedChange = {
+                        Controller.tool.value = FillTool
+                    }
+                )
+                CheckboxItem(
+                    TrashTool.name,
+                    checked = Controller.tool.value is TrashTool,
+                    onCheckedChange = {
+                        Controller.tool.value = TrashTool
+                    }
+                )
+                CheckboxItem(
+                    ExpansionTool.name,
+                    checked = Controller.tool.value is ExpansionTool,
+                    onCheckedChange = {
+                        Controller.tool.value = ExpansionTool
+                    }
+                )
             }
             Menu("Справка", mnemonic = 'I') {
                 Item("Инструкция", onClick = { Controller.instruction.value = true })
@@ -40,7 +69,7 @@ class Menu() {
 
     object Controller {
         var save = mutableStateOf(false)
-        var tool = mutableStateOf("TOOL")
+        var tool = mutableStateOf<Tool>(PenTool)
         var instruction = mutableStateOf(false)
         var about = mutableStateOf(false)
     }

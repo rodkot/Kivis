@@ -26,7 +26,7 @@ class ExpansionButton (private val currentTool: MutableState<Tool>) : Button() {
 
 
     override fun handleClick() {
-        currentTool.value = ExpansionTool()
+        currentTool.value = ExpansionTool
     }
 
     @OptIn(ExperimentalFoundationApi::class)

@@ -4,12 +4,10 @@ import androidx.compose.ui.graphics.Color
 import ru.nsu.ccfit.kivis.component.PaintCanvas
 import ru.nsu.ccfit.kivis.draw.fill
 
-class FillTool(val color: Color = Color.Red) : Tool() {
-    companion object {
-        const val name: String = "Заливка"
-    }
+object FillTool : Tool("Заливка") {
+    var color: Color = Color.Red
 
     override fun draw(paintCanvas: PaintCanvas) {
-        paintCanvas.fill(paintCanvas.offsetPress,color)
+        paintCanvas.fill(paintCanvas.offsetPress, color)
     }
 }

@@ -22,8 +22,7 @@ import ru.nsu.ccfit.kivis.dialog.PenDialog
 import ru.nsu.ccfit.kivis.tool.PenTool
 import ru.nsu.ccfit.kivis.tool.Tool
 
-class PenButton(private val currentTool: MutableState<Tool>,
-                private val currentPenTool: MutableState<PenTool>) : Button() {
+class PenButton(private val currentTool: MutableState<Tool>) : Button() {
     private val name: String = "Линия"
     private val viewDialog = mutableStateOf(false)
 
@@ -32,7 +31,7 @@ class PenButton(private val currentTool: MutableState<Tool>,
     }
 
     private fun changeTool(){
-        currentTool.value = currentPenTool.value
+        currentTool.value = PenTool
     }
 
     @OptIn(ExperimentalFoundationApi::class)
@@ -62,7 +61,7 @@ class PenButton(private val currentTool: MutableState<Tool>,
                 Icon(FeatherIcons.Edit3, contentDescription = "Localized description")
             }
             if (dialog.value) {
-                PenDialog(currentPenTool,{ changeTool() }, { dialog.value=false })
+                PenDialog({ changeTool() }, { dialog.value=false })
             }
         }
     }
