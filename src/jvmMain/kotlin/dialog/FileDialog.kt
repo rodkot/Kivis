@@ -6,12 +6,30 @@ import java.awt.FileDialog
 import java.awt.Frame
 
 @Composable
-fun FileDialog(
+fun FileSaveDialog(
     parent: Frame? = null,
     onCloseRequest: (result: String?) -> Unit
 ) = AwtWindow(
     create = {
         object : FileDialog(parent, "Выберете место для сохранения", SAVE) {
+            override fun setVisible(value: Boolean) {
+                super.setVisible(value)
+                if (value) {
+                    onCloseRequest(directory + file)
+                }
+            }
+        }
+    },
+    dispose = FileDialog::dispose
+)
+
+@Composable
+fun FileOpenDialog(
+    parent: Frame? = null,
+    onCloseRequest: (result: String?) -> Unit
+) = AwtWindow(
+    create = {
+        object : FileDialog(parent, "Выберете файл для открытия", LOAD) {
             override fun setVisible(value: Boolean) {
                 super.setVisible(value)
                 if (value) {

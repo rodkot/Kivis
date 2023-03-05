@@ -47,6 +47,7 @@ fun MainWindow() {
     ) {
         val dialogAbout = remember { Menu.Controller.about }
         val saveAction = remember { Menu.Controller.save }
+        val openAction = remember { Menu.Controller.open }
         val dialogManual = remember { Menu.Controller.instruction }
         Menu.Controller.tool = MainWindowController.currentTool
 
@@ -67,7 +68,7 @@ fun MainWindow() {
                     .horizontalScroll(stateHorizontal)
                     .onSizeChanged { MainWindowController.size.value = it }
             ) {
-                if (click.value != previousClick)
+                if (click.value != previousClick && !openAction.value && !saveAction.value)
                     s.draw(MainWindowController.canvas)
                 previousClick = click.value
 
@@ -87,8 +88,23 @@ fun MainWindow() {
                 adapter = rememberScrollbarAdapter(stateHorizontal)
             )
 
+            if (openAction.value) {
+                FileOpenDialog {
+                    if (it != null) {
+                        try {
+                            val file = File(it)
+                            val image = ImageIO.read(file)
+                            MainWindowController.image.value = image
+                        } catch (e: Exception) {
+                            openAction.value = false
+                        }
+                    }
+                    openAction.value = false
+                }
+            }
+
             if (saveAction.value) {
-                FileDialog {
+                FileSaveDialog {
                     if (it != null) {
                         val output = File(it.plus(".png"))
                         output.createNewFile()

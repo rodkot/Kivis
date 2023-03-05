@@ -14,13 +14,17 @@ class Menu() {
     @OptIn(ExperimentalComposeUiApi::class)
     @Composable
     fun render(frameWindowScope: FrameWindowScope) {
-       // var isSubmenuShowing = remember { mutableStateOf(false) }
         frameWindowScope.MenuBar {
             Menu("Файл", mnemonic = 'F') {
                 Item(
                     "Сохранить",
                     onClick = { Controller.save.value = true },
                     shortcut = KeyShortcut(Key.S, ctrl = true)
+                )
+                Item(
+                    "Открыть",
+                    onClick = { Controller.open.value = true },
+                    shortcut = KeyShortcut(Key.P, ctrl = true)
                 )
             }
             Menu("Инструменты", mnemonic = 'I') {
@@ -69,6 +73,7 @@ class Menu() {
 
     object Controller {
         var save = mutableStateOf(false)
+        var open = mutableStateOf(false)
         var tool = mutableStateOf<Tool>(PenTool)
         var instruction = mutableStateOf(false)
         var about = mutableStateOf(false)
