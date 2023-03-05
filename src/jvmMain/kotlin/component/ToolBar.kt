@@ -25,6 +25,7 @@ class ToolBar(
                 Row {
                     PenButton(currentTool).render()
                     PolygonButton(currentTool).render()
+                    StarButton(currentTool).render()
                     FillButton(currentTool).render()
                     TrashButton(currentTool).render()
                     ExpansionButton(currentTool).render()
