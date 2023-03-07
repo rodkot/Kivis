@@ -19,10 +19,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
 import compose.icons.FeatherIcons
-import compose.icons.feathericons.MinusSquare
 import compose.icons.feathericons.Star
-import ru.nsu.ccfit.kivis.dialog.PolygonDialog
-import ru.nsu.ccfit.kivis.tool.PolygonTool
+import ru.nsu.ccfit.kivis.dialog.StarDialog
 import ru.nsu.ccfit.kivis.tool.StarTool
 import ru.nsu.ccfit.kivis.tool.Tool
 
@@ -35,7 +33,7 @@ class StarButton(private val currentTool: MutableState<Tool>) : Button() {
     }
 
     private fun changeTool() {
-        currentTool.value = PolygonTool
+        currentTool.value = StarTool
     }
 
     @OptIn(ExperimentalFoundationApi::class)
@@ -64,7 +62,7 @@ class StarButton(private val currentTool: MutableState<Tool>) : Button() {
                 Icon(FeatherIcons.Star, contentDescription = "Localized description")
             }
             if (dialog.value) {
-                PolygonDialog({ changeTool() }, { dialog.value = false })
+                StarDialog({ changeTool() }, { dialog.value = false })
             }
         }
     }
