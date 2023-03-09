@@ -31,7 +31,7 @@ fun StarDialog(confirmClick: () -> Unit, cancelClick: () -> Unit) {
         title = { Text(text = "Настройка инстумента ${StarTool.name}") },
         text = {
             Column {
-                countVerticesBox(countPeek, 5f..10f, 5)
+                countVerticesBox(countPeek, 5f..16f, 11)
                 Spacer(Modifier.height(10.dp))
                 rotationBox(rotation, 0f..360f, 360)
                 Spacer(Modifier.height(10.dp))

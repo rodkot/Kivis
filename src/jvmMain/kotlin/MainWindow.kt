@@ -28,10 +28,9 @@ class MainWindowController {
 
         val image = mutableStateOf(BufferedImage(100, 100, BufferedImage.TYPE_INT_RGB))
         var size = mutableStateOf(IntSize.Zero)
-        var isPaint = mutableStateOf(false)
 
         val toolBar = ToolBar(currentTool)
-        val canvas = PaintCanvas(image, size, isPaint)
+        val canvas = PaintCanvas(image, size).also { it.start() }
     }
 }
 
@@ -68,11 +67,57 @@ fun MainWindow() {
                     .horizontalScroll(stateHorizontal)
                     .onSizeChanged { MainWindowController.size.value = it }
             ) {
-                if (click.value != previousClick && !openAction.value && !saveAction.value)
-                    s.draw(MainWindowController.canvas)
-                previousClick = click.value
+                //TODO Рисование идет некорректно при работе с окном
 
+                if (click.value != previousClick && MainWindowController.canvas.isPaint)
+                    s.draw(MainWindowController.canvas)
+
+
+                if (!openAction.value && !MainWindowController.canvas.isPaint)
+                    MainWindowController.canvas.start()
+
+                previousClick = click.value
                 MainWindowController.canvas.render()
+
+                if (openAction.value) {
+                    MainWindowController.canvas.stop()
+                    FileOpenDialog {
+                        if (it != null) {
+                            try {
+                                val file = File(it)
+                                val image = ImageIO.read(file)
+                                MainWindowController.image.value = image
+                            } catch (e: Exception) {
+                                openAction.value = false
+                            }
+                        }
+                        openAction.value = false
+                    }
+                }
+
+                if (saveAction.value) {
+                    FileSaveDialog {
+                        if (it != null) {
+                            val output = File(it.plus(".png"))
+                            output.createNewFile()
+
+                            try {
+                                ImageIO.write(MainWindowController.image.value, "PNG", output)
+                            } catch (e: IOException) {
+                                println(e.message)
+                            }
+                        }
+                        saveAction.value = false
+                    }
+                }
+
+                if (dialogAbout.value) {
+                    AboutDialog { dialogAbout.value = false }
+                }
+
+                if (dialogManual.value) {
+                    ManualDialog { dialogManual.value = false }
+                }
             }
 
             VerticalScrollbar(
@@ -88,44 +133,7 @@ fun MainWindow() {
                 adapter = rememberScrollbarAdapter(stateHorizontal)
             )
 
-            if (openAction.value) {
-                FileOpenDialog {
-                    if (it != null) {
-                        try {
-                            val file = File(it)
-                            val image = ImageIO.read(file)
-                            MainWindowController.image.value = image
-                        } catch (e: Exception) {
-                            openAction.value = false
-                        }
-                    }
-                    openAction.value = false
-                }
-            }
 
-            if (saveAction.value) {
-                FileSaveDialog {
-                    if (it != null) {
-                        val output = File(it.plus(".png"))
-                        output.createNewFile()
-
-                        try {
-                            ImageIO.write(MainWindowController.image.value, "PNG", output)
-                        } catch (e: IOException) {
-                            println(e.message)
-                        }
-                    }
-                    saveAction.value = false
-                }
-            }
-
-            if (dialogAbout.value) {
-                AboutDialog { dialogAbout.value = false }
-            }
-
-            if (dialogManual.value) {
-                ManualDialog { dialogManual.value = false }
-            }
         }
     }
 }

@@ -23,15 +23,34 @@ object StarTool : Tool("Звезда") {
             val (xi1, yi1) = list[(i + 1) % countPeek].x to list[(i + 1) % countPeek].y
             val (xi2, yi2) = list[(i + 2) % countPeek].x to list[(i + 2) % countPeek].y
             val (xi3, yi3) = list[(i + 3) % countPeek].x to list[(i + 3) % countPeek].y
-            val A1 = (xi2 - xi) / (yi2 - yi)
-            val A2 = (xi3 - xi1) / (yi3 - yi1)
-            val y = (-xi + xi1 + A1 * yi - A2 * yi1) / (A1 - A2)
-            val x = A1 * (y - yi) + xi
-            result.add(Offset(x , y))
-            result.add(Offset(xi2, yi2))
+            try {
+                val A1 = (xi2 - xi) / (yi2 - yi)
+                val A2 = (xi3 - xi1) / (yi3 - yi1)
+                if (A2.isInfinite()) {
+                    val y = yi3
+                    val x = A1 * (y - yi) + xi
+                    result.add(Offset(x, y))
+                    result.add(Offset(xi2, yi2))
+                } else
+                    if (A1.isInfinite()) {
+                        val y = yi
+                        val x = A2 * (y - yi1) + xi1
+                        result.add(Offset(x, y))
+                        result.add(Offset(xi2, yi2))
+                    } else {
+                        val y = (-xi + xi1 + A1 * yi - A2 * yi1) / (A1 - A2)
+                        val x = A1 * (y - yi) + xi
+                        result.add(Offset(x, y))
+                        result.add(Offset(xi2, yi2))
+                    }
+            } catch (e: Exception) {
+                println(e.message)
+            }
+
         }
         return result
     }
+
     private fun getOffsetsStar(centerOffset: Offset): ArrayList<Offset> {
         val listOffset: ArrayList<Offset> = arrayListOf()
         val fi = 360 / countPeek
@@ -41,7 +60,7 @@ object StarTool : Tool("Звезда") {
             val radians = (Math.PI / 180) * (current % 360)
             val x = radius * cos(radians)
             val y = radius * sin(radians)
-            listOffset.add(Offset( x.toFloat()+centerOffset.x,  y.toFloat()+centerOffset.y))
+            listOffset.add(Offset(x.toFloat() + centerOffset.x, y.toFloat() + centerOffset.y))
             current += fi
         }
 
