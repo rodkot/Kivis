@@ -1,7 +1,7 @@
 package ru.nsu.ccfit.kivis.tool
 
 import androidx.compose.ui.geometry.Offset
-import ru.nsu.ccfit.kivis.component.PaintCanvas
+import ru.nsu.ccfit.kivis.component.KivisImage
 import ru.nsu.ccfit.kivis.draw.drawPolygon
 import kotlin.math.cos
 import kotlin.math.sin
@@ -11,8 +11,10 @@ object StarTool : Tool("Звезда") {
     var radius: Float = 10f
     var rotation: Float = 0f
 
-    override fun draw(paintCanvas: PaintCanvas) {
-        paintCanvas.drawPolygon(getOffsetsStar(paintCanvas.offsetRelease))
+    override fun draw(image: KivisImage, pressOffset: Offset, releaseOffset: Offset): KivisImage {
+        val newImage= image.copy()
+        newImage.drawPolygon(getOffsetsStar(pressOffset))
+        return  newImage
     }
 
     private fun getInnerOffsetsStar(list: ArrayList<Offset>): ArrayList<Offset> {

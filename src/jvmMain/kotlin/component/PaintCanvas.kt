@@ -3,47 +3,36 @@ package ru.nsu.ccfit.kivis.component
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.input.pointer.*
-import androidx.compose.ui.unit.IntSize
-import ru.nsu.ccfit.kivis.draw.clear
-import ru.nsu.ccfit.kivis.draw.resize
-import java.awt.image.BufferedImage
 
 
-class PaintCanvas(
-     val image: MutableState<BufferedImage>,
-     val size: MutableState<IntSize>,
-)   {
-    private var start: Boolean = false
-    var isPaint: Boolean = false
+class PaintCanvas() {
+    var isPaint: Boolean = true
 
     val offsetClick = mutableStateOf(Offset(0f, 0f) to Offset(0f, 0f))
-    var offsetPress = (Offset(0F, 0F))
-    var offsetRelease = (Offset(0F, 0F))
+    private var offsetPress = (Offset(0F, 0F))
+    private var offsetRelease = (Offset(0F, 0F))
 
 
-      fun start() {
+    fun start() {
         isPaint = true
     }
 
-      fun stop() {
+    fun stop() {
         isPaint = false
     }
 
     @OptIn(ExperimentalComposeUiApi::class)
     @Composable
-      fun render(onClick: (PaintCanvas) -> Unit) {
-        val d = remember {  }
+    fun render(image: KivisImage, onClick: (KivisImage, Offset, Offset) -> Unit) {
         var positionRelease: Offset
         var positionPress: Offset
-        Image(image.value.toComposeImageBitmap(), contentDescription = "Изображение",
+        Image(image.toComposeImageBitmap(), contentDescription = "Изображение",
             modifier = Modifier.fillMaxSize()
                 .onPointerEvent(PointerEventType.Release) {
                     positionRelease = it.changes.first().position
@@ -51,8 +40,8 @@ class PaintCanvas(
                     if (0 <= positionRelease.x && positionRelease.x < size.width) {
                         if (0 <= positionRelease.y && positionRelease.y < size.height) {
                             if (isPaint) {
-                                offsetClick.value = offsetPress to  offsetRelease
-                                onClick.invoke(this@PaintCanvas)
+                                offsetClick.value = offsetPress to offsetRelease
+                                onClick.invoke(image, offsetPress, offsetRelease)
                             }
                         }
                     }
@@ -60,11 +49,6 @@ class PaintCanvas(
                     positionPress = it.changes.first().position
                     offsetPress = positionPress
                 })
-        if (!start && size.value != IntSize.Zero) {
-            start = true
-            clear()
-            resize()
-        }
     }
 
 

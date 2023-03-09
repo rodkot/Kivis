@@ -1,7 +1,7 @@
 package ru.nsu.ccfit.kivis.tool
 
 import androidx.compose.ui.geometry.Offset
-import ru.nsu.ccfit.kivis.component.PaintCanvas
+import ru.nsu.ccfit.kivis.component.KivisImage
 import ru.nsu.ccfit.kivis.draw.drawPolygon
 import kotlin.math.cos
 import kotlin.math.sin
@@ -11,8 +11,10 @@ object PolygonTool : Tool("Многоугольник") {
     var radius: Float = 10f
     var rotation: Float = 0f
 
-    override fun draw(paintCanvas: PaintCanvas) {
-        paintCanvas.drawPolygon(getOffsetsPolygon(paintCanvas.offsetPress))
+    override fun draw(image: KivisImage, pressOffset: Offset, releaseOffset: Offset): KivisImage {
+        val newImage= image.copy()
+        newImage.drawPolygon(getOffsetsPolygon(pressOffset))
+        return  newImage
     }
 
     private fun getOffsetsPolygon(centerOffset: Offset): List<Offset> {

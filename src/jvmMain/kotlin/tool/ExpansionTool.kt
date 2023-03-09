@@ -1,11 +1,12 @@
 package ru.nsu.ccfit.kivis.tool
 
-import ru.nsu.ccfit.kivis.component.PaintCanvas
+import androidx.compose.ui.geometry.Offset
+import ru.nsu.ccfit.kivis.component.KivisImage
 import ru.nsu.ccfit.kivis.draw.resize
 
 object ExpansionTool : Tool("Растянуть") {
 
-    override fun draw(paintCanvas: PaintCanvas) {
-        paintCanvas.resize()
+    override fun draw(image: KivisImage, pressOffset: Offset, releaseOffset: Offset): KivisImage {
+        return image.resize()
     }
 }

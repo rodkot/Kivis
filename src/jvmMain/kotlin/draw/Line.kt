@@ -2,21 +2,21 @@ package ru.nsu.ccfit.kivis.draw
 
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.*
-import ru.nsu.ccfit.kivis.component.PaintCanvas
+import ru.nsu.ccfit.kivis.component.KivisImage
 
 import java.awt.BasicStroke
 import java.awt.Graphics2D
 import kotlin.math.abs
 
-fun PaintCanvas.drawPixel(x: Int, y: Int, color: Color) {
-    if (x < image.value.width && x >= 0) {
-        if (y < image.value.height && y >= 0) {
-            image.value.setRGB(x, y, color.toArgb())
+fun KivisImage.drawPixel(x: Int, y: Int, color: Color) {
+    if (x in 0 until width) {
+        if (y in 0 until height) {
+            setRGB(x, y, color.toArgb())
         }
     }
 }
 
-fun PaintCanvas.drawLine(offsetA: Offset, offsetB: Offset, color: Color, brush: Int) {
+fun KivisImage.drawLine(offsetA: Offset, offsetB: Offset, color: Color, brush: Int) {
     when (brush) {
         1 -> {
             var (x, y) = offsetA.x.toInt() to offsetA.y.toInt()
@@ -51,7 +51,7 @@ fun PaintCanvas.drawLine(offsetA: Offset, offsetB: Offset, color: Color, brush: 
         }
 
         else -> {
-            val graphics: Graphics2D = image.value.createGraphics()
+            val graphics: Graphics2D = createGraphics()
             graphics.color = java.awt.Color(color.toArgb())
             graphics.stroke = BasicStroke(brush.toFloat());
             graphics.drawLine(offsetA.x.toInt(), offsetA.y.toInt(), offsetB.x.toInt(), offsetB.y.toInt())

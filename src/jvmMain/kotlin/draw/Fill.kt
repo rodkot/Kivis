@@ -2,7 +2,7 @@ package ru.nsu.ccfit.kivis.draw
 
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.*
-import ru.nsu.ccfit.kivis.component.PaintCanvas
+import ru.nsu.ccfit.kivis.component.KivisImage
 import java.awt.Graphics2D
 import java.util.*
 import java.util.function.Consumer
@@ -13,18 +13,17 @@ data class Snapshot(
     val y: Int
 )
 
-fun PaintCanvas.findsSnapshot(snapshot: Snapshot, color: Color): List<Snapshot> {
+fun KivisImage.findsSnapshot(snapshot: Snapshot, color: Color): List<Snapshot> {
     val snapshots: ArrayList<Snapshot> = arrayListOf()
-    val currentImage = image.value
-    val pixelLine = IntArray(currentImage.width)
+    val pixelLine = IntArray(width)
 
-    currentImage.getRGB(0, snapshot.y, currentImage.width, 1,pixelLine,0,0)
+   getRGB(0, snapshot.y, width, 1,pixelLine,0,0)
     if (Color(pixelLine[snapshot.xl]) != color) {
         return snapshots
     }
 
-    if (snapshot.y < currentImage.height - 1) {
-        currentImage.getRGB(0, snapshot.y+1, currentImage.width, 1,pixelLine,0,0)
+    if (snapshot.y < height - 1) {
+       getRGB(0, snapshot.y+1, width, 1,pixelLine,0,0)
         // Пиксели которые имеют тот же цвет что и область true
         //  val upLine = pixelLine.map { Color(it) == color }
         var current = snapshot.xl
@@ -36,13 +35,13 @@ fun PaintCanvas.findsSnapshot(snapshot: Snapshot, color: Color): List<Snapshot> 
         while (current <= snapshot.xr) {
             val xl = current
             if (pixelLine[current] == color.toArgb()) {
-                while (current < currentImage.width && pixelLine[current] == color.toArgb()) {
+                while (current < width && pixelLine[current] == color.toArgb()) {
                     current++
                 }
                 val xr = current
                 snapshots.add(Snapshot(xl, xr - 1, snapshot.y + 1))
             } else {
-                while (current < currentImage.width && pixelLine[current] != color.toArgb()) {
+                while (current < width && pixelLine[current] != color.toArgb()) {
                     current++
                 }
             }
@@ -51,7 +50,7 @@ fun PaintCanvas.findsSnapshot(snapshot: Snapshot, color: Color): List<Snapshot> 
     }
 
     if (snapshot.y > 0) {
-        currentImage.getRGB(0, snapshot.y-1, currentImage.width, 1,pixelLine,0,0)
+       getRGB(0, snapshot.y-1, width, 1,pixelLine,0,0)
         // Пиксели которые имеют тот же цвет что и область true
         //  val upLine = pixelLine.map { Color(it) == color }
         var current = snapshot.xl
@@ -63,13 +62,13 @@ fun PaintCanvas.findsSnapshot(snapshot: Snapshot, color: Color): List<Snapshot> 
         while (current <= snapshot.xr) {
             val xl = current
             if (pixelLine[current] == color.toArgb()) {
-                while (current < currentImage.width && pixelLine[current] == color.toArgb()) {
+                while (current < width && pixelLine[current] == color.toArgb()) {
                     current++
                 }
                 val xr = current
                 snapshots.add(Snapshot(xl, xr - 1, snapshot.y - 1))
             } else {
-                while (current < currentImage.width && pixelLine[current] != color.toArgb()) {
+                while (current < width && pixelLine[current] != color.toArgb()) {
                     current++
                 }
             }
@@ -79,10 +78,9 @@ fun PaintCanvas.findsSnapshot(snapshot: Snapshot, color: Color): List<Snapshot> 
     return snapshots
 }
 
-fun PaintCanvas.findFirstSnapshot(offset: Offset): Pair<Snapshot, Color> {
-    val currentImage = image.value
-    val pixelLine = IntArray(currentImage.width)
-    currentImage.getRGB(0, offset.y.toInt(), currentImage.width, 1,pixelLine,0,0)
+fun KivisImage.findFirstSnapshot(offset: Offset): Pair<Snapshot, Color> {
+    val pixelLine = IntArray(width)
+    getRGB(0, offset.y.toInt(), width, 1,pixelLine,0,0)
     val areaColor = pixelLine[offset.x.toInt()]
     // Пиксели которые имеют тот же цвет что и область true
 
@@ -91,13 +89,13 @@ fun PaintCanvas.findFirstSnapshot(offset: Offset): Pair<Snapshot, Color> {
     while (xl >= 0 && pixelLine[xl] == areaColor) {
         xl--
     }
-    while (xr < currentImage.width && pixelLine[xr] == areaColor) {
+    while (xr < width && pixelLine[xr] == areaColor) {
         xr++
     }
     return Snapshot(xl + 1, xr - 1, offset.y.toInt()) to Color(areaColor)
 }
 
-fun PaintCanvas.fill(offset: Offset, targetColor: Color) {
+fun KivisImage.fill(offset: Offset, targetColor: Color) {
     val snapshots: Stack<Snapshot> = Stack()
 
     val p = findFirstSnapshot(offset)
@@ -116,9 +114,9 @@ fun PaintCanvas.fill(offset: Offset, targetColor: Color) {
     }
 }
 
-fun PaintCanvas.clear() {
-    val graphics: Graphics2D = image.value.createGraphics()
+fun KivisImage.clear() {
+    val graphics: Graphics2D =  createGraphics()
     graphics.background = java.awt.Color.WHITE
-    graphics.clearRect(0, 0, image.value.width, image.value.height)
+    graphics.clearRect(0, 0, width, height)
     graphics.dispose()
 }

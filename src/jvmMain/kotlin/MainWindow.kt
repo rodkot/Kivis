@@ -12,12 +12,9 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.IntSize
-import ru.nsu.ccfit.kivis.component.Menu
-import ru.nsu.ccfit.kivis.component.PaintCanvas
-import ru.nsu.ccfit.kivis.component.ToolBar
+import ru.nsu.ccfit.kivis.component.*
 import ru.nsu.ccfit.kivis.dialog.*
 import ru.nsu.ccfit.kivis.tool.*
-import java.awt.image.BufferedImage
 import java.io.File
 import java.io.IOException
 import javax.imageio.ImageIO
@@ -26,15 +23,15 @@ class MainWindowController {
     companion object {
         val currentTool = mutableStateOf<Tool>(PenTool)
 
-        val image = mutableStateOf(BufferedImage(100, 100, BufferedImage.TYPE_INT_RGB))
         var size = mutableStateOf(IntSize.Zero)
+        val image = mutableStateOf(KivisImage(700, 400, size))
 
         val toolBar = ToolBar(currentTool)
-        val canvas = PaintCanvas(image, size).also { it.start() }
+        val canvas = PaintCanvas()
     }
 }
 
-var previousClick: Pair<Offset, Offset> = Offset(0f, 0f) to Offset(0f, 0f)
+
 
 @Composable
 @Preview
@@ -48,9 +45,9 @@ fun MainWindow() {
         val saveAction = remember { Menu.Controller.save }
         val openAction = remember { Menu.Controller.open }
         val dialogManual = remember { Menu.Controller.instruction }
+        val remImage = remember { MainWindowController.image }
         Menu.Controller.tool = MainWindowController.currentTool
 
-        val click = remember { MainWindowController.canvas.offsetClick }
         Box(Modifier.fillMaxWidth()) {
             MainWindowController.toolBar.render()
         }
@@ -63,22 +60,19 @@ fun MainWindow() {
                 modifier = Modifier
                     .fillMaxSize()
                     .verticalScroll(stateVertical)
-                    // .padding(end = 12.dp, bottom = 12.dp)
                     .horizontalScroll(stateHorizontal)
                     .onSizeChanged { MainWindowController.size.value = it }
             ) {
                 //TODO Рисование идет некорректно при работе с окном
 
-//                if (click.value != previousClick && MainWindowController.canvas.isPaint)
-//                    s.draw(MainWindowController.canvas)
-
-
-//                if (!openAction.value && !MainWindowController.canvas.isPaint)
-//                    MainWindowController.canvas.start()
-
-                //previousClick = click.value
-                MainWindowController.canvas.render{
-                    s.draw(MainWindowController.canvas)
+                MainWindowController.canvas.render(remImage.value) { image: KivisImage, press: Offset, release: Offset ->
+                    run {
+                        remImage.value = s.draw(
+                            image,
+                            press,
+                            release
+                        )
+                    }
                 }
 
                 if (openAction.value) {
@@ -88,12 +82,14 @@ fun MainWindow() {
                             try {
                                 val file = File(it)
                                 val image = ImageIO.read(file)
-                                MainWindowController.image.value = image
+                                remImage.value = image.toKivisImage(MainWindowController.size)
+                                openAction.value = false
+                                MainWindowController.canvas.start()
                             } catch (e: Exception) {
                                 openAction.value = false
+                                MainWindowController.canvas.start()
                             }
                         }
-                        openAction.value = false
                     }
                 }
 
@@ -134,8 +130,6 @@ fun MainWindow() {
                 style = ru.nsu.ccfit.kivis.component.defaultScrollbarStyle(),
                 adapter = rememberScrollbarAdapter(stateHorizontal)
             )
-
-
         }
     }
 }
