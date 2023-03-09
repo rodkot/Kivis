@@ -1,5 +1,6 @@
 package ru.nsu.ccfit.kivis.draw
 
+
 import ru.nsu.ccfit.kivis.component.PaintCanvas
 import java.awt.Graphics2D
 import java.awt.image.BufferedImage

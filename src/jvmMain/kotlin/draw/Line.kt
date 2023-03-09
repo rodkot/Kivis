@@ -3,6 +3,7 @@ package ru.nsu.ccfit.kivis.draw
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.*
 import ru.nsu.ccfit.kivis.component.PaintCanvas
+
 import java.awt.BasicStroke
 import java.awt.Graphics2D
 import kotlin.math.abs

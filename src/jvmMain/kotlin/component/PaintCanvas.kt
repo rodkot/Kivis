@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -17,9 +18,9 @@ import java.awt.image.BufferedImage
 
 
 class PaintCanvas(
-    val image: MutableState<BufferedImage>,
-    val size: MutableState<IntSize>,
-) : Renderable {
+     val image: MutableState<BufferedImage>,
+     val size: MutableState<IntSize>,
+)   {
     private var start: Boolean = false
     var isPaint: Boolean = false
 
@@ -28,18 +29,18 @@ class PaintCanvas(
     var offsetRelease = (Offset(0F, 0F))
 
 
-    fun start() {
+      fun start() {
         isPaint = true
     }
 
-    fun stop() {
+      fun stop() {
         isPaint = false
     }
 
-
     @OptIn(ExperimentalComposeUiApi::class)
     @Composable
-    override fun render() {
+      fun render(onClick: (PaintCanvas) -> Unit) {
+        val d = remember {  }
         var positionRelease: Offset
         var positionPress: Offset
         Image(image.value.toComposeImageBitmap(), contentDescription = "Изображение",
@@ -49,7 +50,10 @@ class PaintCanvas(
                     offsetRelease = positionRelease
                     if (0 <= positionRelease.x && positionRelease.x < size.width) {
                         if (0 <= positionRelease.y && positionRelease.y < size.height) {
-                            if (isPaint) offsetClick.value = offsetRelease to offsetPress
+                            if (isPaint) {
+                                offsetClick.value = offsetPress to  offsetRelease
+                                onClick.invoke(this@PaintCanvas)
+                            }
                         }
                     }
                 }.onPointerEvent(PointerEventType.Press) {
@@ -62,4 +66,6 @@ class PaintCanvas(
             resize()
         }
     }
+
+
 }

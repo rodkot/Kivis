@@ -69,15 +69,17 @@ fun MainWindow() {
             ) {
                 //TODO Рисование идет некорректно при работе с окном
 
-                if (click.value != previousClick && MainWindowController.canvas.isPaint)
+//                if (click.value != previousClick && MainWindowController.canvas.isPaint)
+//                    s.draw(MainWindowController.canvas)
+
+
+//                if (!openAction.value && !MainWindowController.canvas.isPaint)
+//                    MainWindowController.canvas.start()
+
+                //previousClick = click.value
+                MainWindowController.canvas.render{
                     s.draw(MainWindowController.canvas)
-
-
-                if (!openAction.value && !MainWindowController.canvas.isPaint)
-                    MainWindowController.canvas.start()
-
-                previousClick = click.value
-                MainWindowController.canvas.render()
+                }
 
                 if (openAction.value) {
                     MainWindowController.canvas.stop()
