@@ -9,12 +9,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.input.pointer.*
+import androidx.compose.ui.unit.IntSize
 
 
 class PaintCanvas() {
-    var isPaint: Boolean = true
+    private var isPaint: Boolean = true
 
-    val offsetClick = mutableStateOf(Offset(0f, 0f) to Offset(0f, 0f))
+    private val offsetClick = mutableStateOf(Offset(0f, 0f) to Offset(0f, 0f))
+
+    private var size:IntSize = IntSize.Zero
     private var offsetPress = (Offset(0F, 0F))
     private var offsetRelease = (Offset(0F, 0F))
 

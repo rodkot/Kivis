@@ -14,6 +14,7 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.IntSize
 import ru.nsu.ccfit.kivis.component.*
 import ru.nsu.ccfit.kivis.dialog.*
+import ru.nsu.ccfit.kivis.draw.resize
 import ru.nsu.ccfit.kivis.tool.*
 import java.io.File
 import java.io.IOException
@@ -24,13 +25,12 @@ class MainWindowController {
         val currentTool = mutableStateOf<Tool>(PenTool)
 
         var size = mutableStateOf(IntSize.Zero)
-        val image = mutableStateOf(KivisImage(700, 400, size))
+        val image = mutableStateOf(KivisImage(700, 400))
 
         val toolBar = ToolBar(currentTool)
         val canvas = PaintCanvas()
     }
 }
-
 
 
 @Composable
@@ -61,16 +61,21 @@ fun MainWindow() {
                     .fillMaxSize()
                     .verticalScroll(stateVertical)
                     .horizontalScroll(stateHorizontal)
-                    .onSizeChanged { MainWindowController.size.value = it }
+                    .onSizeChanged {
+                        if (MainWindowController.size.value == IntSize.Zero)
+                            MainWindowController.image.value = MainWindowController.image.value.resize(it)
+                        MainWindowController.size.value = it;
+
+                    }
             ) {
-                //TODO Рисование идет некорректно при работе с окном
 
                 MainWindowController.canvas.render(remImage.value) { image: KivisImage, press: Offset, release: Offset ->
                     run {
                         remImage.value = s.draw(
                             image,
                             press,
-                            release
+                            release,
+                            MainWindowController.size.value
                         )
                     }
                 }
@@ -82,7 +87,7 @@ fun MainWindow() {
                             try {
                                 val file = File(it)
                                 val image = ImageIO.read(file)
-                                remImage.value = image.toKivisImage(MainWindowController.size)
+                                remImage.value = image.toKivisImage()
                                 openAction.value = false
                                 MainWindowController.canvas.start()
                             } catch (e: Exception) {

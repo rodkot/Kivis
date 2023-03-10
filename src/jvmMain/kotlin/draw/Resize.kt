@@ -1,19 +1,20 @@
 package ru.nsu.ccfit.kivis.draw
 
 
+import androidx.compose.ui.unit.IntSize
 import ru.nsu.ccfit.kivis.component.KivisImage
 import java.awt.Graphics2D
 import java.awt.image.BufferedImage
 
-fun KivisImage.resize(): KivisImage {
-    var (w, h) = size.value.width to size.value.height
-    if (size.value.width > width) {
-        w = size.value.width
+fun KivisImage.resize(size:IntSize): KivisImage {
+    var (w, h) = size.width to size.height
+    if (size.width > width) {
+        w = size.width
     }
-    if (size.value.height > height) {
-        h = size.value.height
+    if (size.height > height) {
+        h = size.height
     }
-    val resizeImage = KivisImage(w, h, size)
+    val resizeImage = KivisImage(w, h)
     //this = resizeImage
     resizeImage.clear()
     resizeImage.drawImage(this)

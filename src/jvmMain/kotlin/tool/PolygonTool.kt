@@ -1,6 +1,7 @@
 package ru.nsu.ccfit.kivis.tool
 
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.unit.IntSize
 import ru.nsu.ccfit.kivis.component.KivisImage
 import ru.nsu.ccfit.kivis.draw.drawPolygon
 import kotlin.math.cos
@@ -11,7 +12,7 @@ object PolygonTool : Tool("Многоугольник") {
     var radius: Float = 10f
     var rotation: Float = 0f
 
-    override fun draw(image: KivisImage, pressOffset: Offset, releaseOffset: Offset): KivisImage {
+    override fun draw(image: KivisImage, pressOffset: Offset, releaseOffset: Offset, size: IntSize): KivisImage {
         val newImage= image.copy()
         newImage.drawPolygon(getOffsetsPolygon(pressOffset))
         return  newImage
